@@ -1,0 +1,44 @@
+.about_section{
+    padding: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+.title{
+    color:#F9A219;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.sub_title{
+    color:#F9A219;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+.about_section ul{
+    text-indent: 10px;
+}
+
+.about_section ul li{
+    /* list-style: circle; */
+    text-indent: 10px;
+}
+.about_section ul li strong{
+    color: #F9A219;
+    margin-right: 5px;
+}
+.about_section ul li::before{
+    content: "\2022";
+    color: #F9A219;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+li{
+    font-size: 1.1rem;
+}
+li strong{
+    color: #F9A219;
+    margin-right: 5px;
+}

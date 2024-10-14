@@ -1,0 +1,70 @@
+a{
+  text-decoration: none;
+  color: white;
+}
+
+
+
+.footer {
+    background-color: #00B98B;
+    color: white;
+    padding: 2rem 1rem;
+    position: relative;
+  }
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-section {
+    flex: 1 1 200px;
+    margin-bottom: 1rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 0.5rem;
+  }
+  p {
+    margin-bottom: 0.5rem;
+  }
+  .icon {
+    margin-right: 0.5rem;
+  }
+  .scroll-to-top {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  .scroll-to-top button {
+    background-color: #38b2ac;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+    }
+    .footer-section {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .email{
+  font-size: 16px !important;
+}

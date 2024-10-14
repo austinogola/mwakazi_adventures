@@ -1,0 +1,14 @@
+.heroes{
+    height:500px;
+    width:100%;
+    overflow: hidden;
+}
+
+.image_Holder{
+    height:500px;
+    width:100%;
+    /* border:1px solid red; */
+    /* background-image: url(../images/abadare.jpg); */
+    background-size: cover;
+    background-position:center;
+}

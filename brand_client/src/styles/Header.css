@@ -1,0 +1,52 @@
+.header{
+    /* background-color: #F7F7F7; */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.logoHolder{
+    width:fit-content
+}
+
+.contactHolder{
+    width:fit-content
+}
+.contactHolder p{
+    margin: 0px;
+    font-size: 1rem;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media (max-width: 560px) {
+    /* Your CSS rules for screens smaller than 560px */
+    .headerContainer{
+        flex-direction: column;
+    }
+    .contactHolder{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .headerContainer{
+        /* display: none; */
+    }
+    /* Your CSS rules for screens smaller than 560px */
+    /* .headerContainer{
+        flex-direction: column;
+    }
+    .contactHolder{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    } */
+  }
