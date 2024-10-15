@@ -20,10 +20,10 @@ const AddNewTrip = () => {
     inclusives: [],
     exclusives: [],
     images: [],
-    dates: [],
+    dates: [], // Keep dates as an array
     description: "",
     catch_phrase: "",
-    itinerary: [{ title: "", points: [] }], // Ensure points is initialized
+    itinerary: [{ title: "", points: [] }],
     categories: [],
     blog_contents: [],
     activities: [],
@@ -72,10 +72,10 @@ const AddNewTrip = () => {
       inclusives: [],
       exclusives: [],
       images: [],
-      dates: [],
+      dates: [], // Reset dates
       description: "",
       catch_phrase: "",
-      itinerary: [{ title: "", points: [] }], // Reset to ensure points is initialized
+      itinerary: [{ title: "", points: [] }],
       categories: [],
       blog_contents: [],
       activities: [],
@@ -159,7 +159,7 @@ const AddNewTrip = () => {
           <input
             type="text"
             placeholder="Points (comma separated)"
-            value={item.points ? item.points.join(", ") : ""} // Add a safety check
+            value={item.points ? item.points.join(", ") : ""}
             onChange={(e) =>
               handleArrayInputChange("itinerary", index, {
                 ...item,
@@ -262,6 +262,25 @@ const AddNewTrip = () => {
     </div>
   );
 
+  const renderDateInputs = () => (
+    <div>
+      <label>Dates</label>
+      {newTrip.dates.map((date, index) => (
+        <input
+          key={index}
+          type="date"
+          value={date}
+          onChange={(e) =>
+            handleArrayInputChange("dates", index, e.target.value)
+          }
+        />
+      ))}
+      <button type="button" onClick={() => addToArrayField("dates")}>
+        Add Date
+      </button>
+    </div>
+  );
+
   return (
     <div className="add-trip">
       <h3>Add a New Trip</h3>
@@ -282,7 +301,7 @@ const AddNewTrip = () => {
             required
           />
         </div>
-        {renderDestinationInputs()} {/* Render the new destination inputs */}
+        {renderDestinationInputs()}
         <div>
           <label>Description</label>
           <textarea
@@ -323,9 +342,12 @@ const AddNewTrip = () => {
         {renderArrayInputs("Inclusives", "inclusives")}
         {renderArrayInputs("Exclusives", "exclusives")}
         {renderArrayInputs("Images", "images")}
-        {renderArrayInputs("Dates", "dates")}
-        {renderItineraryInputs()} {/* Render the itinerary inputs */}
-        {renderPlacesVisitedInputs()} {/* Render the places visited inputs */}
+        {renderDateInputs()} {/* Changed to use the date input */}
+        {renderArrayInputs("Categories", "categories")}
+        {renderArrayInputs("Blog Contents", "blog_contents")}
+        {renderArrayInputs("Activities", "activities")}
+        {renderItineraryInputs()}
+        {renderPlacesVisitedInputs()}
         <div>
           <label>Price</label>
           <input
