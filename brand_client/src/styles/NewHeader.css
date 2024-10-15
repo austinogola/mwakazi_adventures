@@ -1,0 +1,45 @@
+.newHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background-color: #2c2c2c;
+  color: white;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+.contactInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  width: fit-content;
+}
+.contactItem {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  width: 250px;
+}
+.socialMedia {
+  display: flex;
+  gap: 1rem;
+}
+.socialMedia a {
+  margin: 0 10px 0 0px;
+}
+.socialIcon {
+  font-size: 20px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.iconSpan {
+  position: relative;
+  top: 3px;
+  margin-right: 5px;
+}
+
+.accountDiv {
+  display: flex;
+}

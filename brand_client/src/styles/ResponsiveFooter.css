@@ -1,0 +1,68 @@
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.footer {
+  background-color: #00b98b;
+  color: white;
+  padding: 2rem 1rem;
+  position: relative;
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  justify-content: center;
+  align-items: center;
+  min-width: 15rem;
+}
+h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 0.5rem;
+}
+p {
+  margin-bottom: 0.5rem;
+}
+.icon {
+  margin-right: 0.5rem;
+}
+.scroll-to-top {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+.scroll-to-top button {
+  background-color: #38b2ac;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+}
+
+.email {
+  font-size: 16px !important;
+}

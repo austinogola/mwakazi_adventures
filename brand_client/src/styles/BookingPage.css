@@ -1,0 +1,226 @@
+.booking-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .booking-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .booking-header h1 {
+    color: #333;
+  }
+  
+  .booking-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  
+  .trip-details, .booking-form {
+    flex: 1 1 300px;
+  }
+  
+  .trip-details h2, .booking-form h2 {
+    margin-bottom: 20px;
+    color: #F5A317;
+  }
+  
+  .trip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .trip-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .trip-text p {
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .btn-book {
+    background-color: #F5A317;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+    width: 100%;
+  }
+  .btn-book-disabled{
+    background-color: #F5A317;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+    width: 100%;
+    cursor: not-allowed;
+    /* pointer-events: none; */
+  }
+  
+  .btn-book:hover {
+    background-color: #d68c0f;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 50px;
+  }
+
+  .pesapal-iframe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .pesapal-iframe-container iframe {
+    max-width: 90%;
+    max-height: 90%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .trip-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #F5A317;
+    margin-top: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  .form-group label {
+    /* display: block; */
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .payment-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: auto;
+  }
+  
+  .total-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #F5A317;
+  }
+  
+  .btn-book {
+    background-color: #F5A317;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  .btn-book:hover {
+    background-color: #d68c0f;
+  }
+  
+  .pesapal-iframe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .pesapal-iframe-container iframe {
+    max-width: 90%;
+    max-height: 90%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .pesapal-iframe-container iframe {
+      width: 95%;
+      height: 95%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .pesapal-iframe-container iframe {
+      width: 95%;
+      height: 95%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .booking-main {
+      flex-direction: column;
+    }
+  
+    .trip-details, .booking-form {
+      flex: 1 1 100%;
+    }
+  }

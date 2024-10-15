@@ -1,0 +1,68 @@
+.social-media-container {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .share-text {
+    background-color: #f0f0f0;
+    color: #333;
+    /* padding: 5px 10px; */
+    border-radius: 0 5px 5px 0;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .social-media-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+    /* margin-bottom: 5px; */
+    border-radius: 0 5px 5px 0;
+    transition: all 0.3s ease;
+  }
+  
+  .social-media-button:hover {
+    width: 50px;
+  }
+  
+  .instagram-icon {
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    border-radius: 6px;
+    position: relative;
+  }
+  
+  .instagram-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+  
+  .instagram-icon::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+  }

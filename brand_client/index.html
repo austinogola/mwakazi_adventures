@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelLux - Discover Your Next Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <video autoplay loop muted>
+            <source src="hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Discover Your Next Adventure</h1>
+            <p>Explore the world with luxury and style</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Where to?">
+                <input type="date">
+                <select>
+                    <option>Trip Type</option>
+                    <option>Adventure</option>
+                    <option>Relaxation</option>
+                    <option>Cultural</option>
+                </select>
+                <button>Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Bar -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">TravelLux</div>
+            <ul class="nav-links">
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#tours">Tours</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Featured Destinations -->
+    <section id="destinations" class="destinations">
+        <div class="container">
+            <h2>Featured Destinations</h2>
+            <div class="destination-grid">
+                <div class="destination-card">
+                    <img src="destination1.jpg" alt="Bali, Indonesia">
+                    <div class="destination-info">
+                        <h3>Bali, Indonesia</h3>
+                        <p>Starting from $1,299</p>
+                        <button>Explore</button>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <img src="destination2.jpg" alt="Paris, France">
+                    <div class="destination-info">
+                        <h3>Paris, France</h3>
+                        <p>Starting from $1,599</p>
+                        <button>Explore</button>
+                    </div>
+                </div>
+                <div class="destination-card">
+                    <img src="destination3.jpg" alt="Santorini, Greece">
+                    <div class="destination-info">
+                        <h3>Santorini, Greece</h3>
+                        <p>Starting from $1,799</p>
+                        <button>Explore</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Tours -->
+    <section id="tours" class="tours">
+        <div class="container">
+            <h2>Popular Tours</h2>
+            <div class="tour-filters">
+                <button class="active" data-filter="all">All</button>
+                <button data-filter="adventure">Adventure</button>
+                <button data-filter="city">City</button>
+                <button data-filter="relaxation">Relaxation</button>
+            </div>
+            <div class="tour-grid">
+                <div class="tour-card" data-category="adventure">
+                    <img src="tour1.jpg" alt="Mountain Hiking">
+                    <div class="tour-info">
+                        <h3>Mountain Hiking</h3>
+                        <p>Starting from $299</p>
+                        <button>Book Now</button>
+                    </div>
+                </div>
+                <div class="tour-card" data-category="city">
+                    <img src="tour2.jpg" alt="City Tour">
+                    <div class="tour-info">
+                        <h3>City Tour</h3>
+                        <p>Starting from $199</p>
+                        <button>Book Now</button>
+                    </div>
+                </div>
+                <div class="tour-card" data-category="relaxation">
+                    <img src="tour3.jpg" alt="Beach Relaxation">
+                    <div class="tour-info">
+                        <h3>Beach Relaxation</h3>
+                        <p>Starting from $399</p>
+                        <button>Book Now</button>
+                    </div>
+                </div>
+                <div class="tour-card" data-category="adventure">
+                    <img src="tour4.jpg" alt="Safari Adventure">
+                    <div class="tour-info">
+                        <h3>Safari Adventure</h3>
+                        <p>Starting from $599</p>
+                        <button>Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>What Our Travelers Say</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial active">
+                    <p>"Amazing experience! The tour was well-organized and exceeded our expectations."</p>
+                    <span>- John Doe</span>
+                </div>
+                <div class="testimonial">
+                    <p>"Unforgettable journey. The attention to detail and luxury accommodations were top-notch."</p>
+                    <span>- Jane Smith</span>
+                </div>
+                <div class="testimonial">
+                    <p>"Our guide was knowledgeable and friendly. We'll definitely book again!"</p>
+                    <span>- Mike Johnson</span>
+                </div>
+            </div>
+            <div class="testimonial-dots"></div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Start Your Adventure?</h2>
+            <p>Explore our destinations and book your dream vacation today!</p>
+            <button class="cta-button">Start Your Adventure</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TravelLux</h3>
+                    <p>Discover the world with luxury and style.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#tours">Tours</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p>1234 Travel Lane<br>Adventure City, TC 56789<br>Phone: (123) 456-7890<br>Email: info@travellux.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to our newsletter for the latest travel deals and tips.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email">
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TravelLux. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#" class="icon-facebook"></a>
+                    <a href="#" class="icon-twitter"></a>
+                    <a href="#" class="icon-instagram"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
