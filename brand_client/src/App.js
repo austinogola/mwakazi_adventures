@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -19,6 +18,7 @@ import AdminTrips from "./pages/AdminTrips";
 import AdminActivities from "./pages/AdminActivities";
 import AdminDests from "./pages/AdminDests";
 import EditTrip from "./pages/EditTrip";
+import EditDestination from "./pages/editDestination";
 // import HomePage from './pages/HomePage';
 function App() {
   return (
@@ -42,6 +42,7 @@ function App() {
         <Route path="/admin/trips" element={<AdminTrips />} />
         <Route path="admin/destinations" element={<AdminDests />} />
         <Route path="admin/edit-trip" element={<EditTrip />} />
+        <Route path="admin/edit-destination" element={<EditDestination />} />
         {/* <Route path="/destinations" element={<Destinations />} />
         <Route path="/trips" element={<Trips />} />
         <Route path="/contact" element={<Contact />} />

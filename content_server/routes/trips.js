@@ -7,7 +7,6 @@ const { verifyToken, isAdmin } = require("../middleware/auth"); // Authenticatio
 const router = express.Router();
 const mongoose = require("mongoose");
 
-// Get all trips
 router.get("/", async (req, res) => {
   try {
     console.log(req.query);
@@ -64,6 +63,16 @@ router.get("/", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error fetching trips", status: "fail", error });
+  }
+});
+
+router.get("/destinations", async (req, res) => {
+  try {
+    const destinations = await Destination.find();
+    res.status(200).json(destinations);
+  } catch (error) {
+    console.error("Error fetching destinations:", error);
+    res.status(500).json({ message: "Error fetching destinations" });
   }
 });
 
@@ -188,6 +197,49 @@ router.post("/addNewTrip", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error creating trip", error: error.message });
+  }
+});
+
+router.post("/addDestination", async (req, res) => {
+  try {
+    const { country, continent, locale } = req.body;
+
+    if (!country || !continent || !locale) {
+      return res
+        .status(400)
+        .json({ message: "Missing required destination details" });
+    }
+
+    const existingDestination = await Destination.findOne({
+      country,
+      continent,
+      locale,
+    });
+
+    if (existingDestination) {
+      return res.status(400).json({
+        message: "Destination already exists",
+        destination: existingDestination,
+      });
+    }
+
+    const newDestination = new Destination({
+      country,
+      continent,
+      locale,
+    });
+
+    await newDestination.save();
+
+    res.status(201).json({
+      message: "Destination created successfully",
+      destination: newDestination,
+    });
+  } catch (error) {
+    console.error("Error creating destination:", error);
+    res
+      .status(500)
+      .json({ message: "Error creating destination", error: error.message });
   }
 });
 

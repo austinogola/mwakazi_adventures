@@ -1,44 +1,50 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const tripSchema = new mongoose.Schema({
   title: { type: String, required: true },
   destination: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Destination'
+    ref: "Destination",
   },
-  places_visited:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Destination'
-  }],
+  places_visited: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Destination",
+    },
+  ],
   duration: {
     number: { type: Number, required: true },
     period: { type: String, required: true }, // e.g., 'days', 'weeks'
   },
-  highlights:[String],
-  inclusives:[String],
-  exclusives:[String],
+  highlights: [String],
+  inclusives: [String],
+  exclusives: [String],
   images: [{ type: String }],
   dates: [Date],
-  description: {type:String},
-  catch_phrase:{type:String},
-  itinerary:[
+  description: { type: String },
+  catch_phrase: { type: String },
+  itinerary: [
     {
-      title: String,          // Example fields inside the object
-      points: [String]  // This is an array of strings
-    }
+      title: String, // Example fields inside the object
+      points: [String], // This is an array of strings
+    },
   ],
   categories: [String],
-  blog_contents:[{
+  blog_contents: [
+    {
       type: mongoose.Schema.Types.ObjectId,
-    ref: 'Blog'
-  }],
-  activities: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Activity'
-  }],
+      ref: "Blog",
+    },
+  ],
+  activities: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Activity",
+    },
+  ],
   price: { type: Number, required: true },
-  rating:{type:Number,default:1}
+  rating: { type: Number, default: 1 },
 });
 
-const Trip = mongoose.model('Trip', tripSchema);
+const Trip = mongoose.model("Trip", tripSchema);
 module.exports = Trip;

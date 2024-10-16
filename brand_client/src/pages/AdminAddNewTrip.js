@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 
 const AddNewTrip = () => {
@@ -30,6 +31,7 @@ const AddNewTrip = () => {
     price: 0,
     rating: 1,
   });
+  const navigate = useNavigate();
 
   const handleAddTrip = async () => {
     const formattedDates = newTrip.dates.map((date) =>
@@ -49,6 +51,7 @@ const AddNewTrip = () => {
       const data = await response.json();
       if (data.status === "success") {
         resetTripForm();
+        navigate("/admin");
       } else {
         setError(data.message || "Error adding trip");
       }
