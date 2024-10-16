@@ -1,6 +1,6 @@
 import SideMenu from "../components/SideMenu";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import axios from "axios"; // Don't forget to import axios
 import { useCookies } from "react-cookie";
 import "../styles/Dashboard.css";
 import AddNewTrip from "./AdminAddNewTrip";
@@ -19,11 +19,10 @@ const AdminTrips = () => {
 
   const fetchTrips = async () => {
     try {
-      const resp = await fetch(`${serverUrl}/api/v1/trips`);
-      const res = await resp.json();
-      if (res.status === "success") {
-        console.log(res.trips);
-        setTrips(res.trips);
+      const response = await axios.get(`${serverUrl}/api/v1/trips`);
+      if (response.status === 200) {
+        console.log(response.data.trips);
+        setTrips(response.data.trips);
       }
     } catch (err) {
       console.error("Error fetching trips:", err);

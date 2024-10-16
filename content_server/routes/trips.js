@@ -7,62 +7,72 @@ const { verifyToken, isAdmin } = require("../middleware/auth"); // Authenticatio
 const router = express.Router();
 const mongoose = require("mongoose");
 
+// router.get("/", async (req, res) => {
+//   try {
+//     console.log(req.query);
+//     let {
+//       activities,
+//       title,
+//       places_visited,
+//       destination,
+//       locations_visited,
+//       duration,
+//       inclusives,
+//       dates,
+//       description,
+//       categories,
+//       price,
+//       rating,
+//       sort,
+//       size,
+//     } = req.query;
+
+//     if (sort) {
+//       sort = JSON.parse(sort);
+//     } else {
+//       sort = {};
+//     }
+
+//     let limit = size || 10;
+
+//     // const trips=await Trip.find({ images: { $ne: [] } }).limit(limit)
+//     const trips = await NewTrip.find({
+//       catch_phrase: { $exists: true, $ne: "" },
+//     })
+//       .sort({ rating: -1, "images.length": -1 })
+//       .limit(limit);
+
+//     let tripsArr = [];
+//     for (const trip of trips) {
+//       const theDest = await Destination.findById(trip.destination);
+//       let activities_arr = [];
+//       // for(const activityId of trip._doc.activities){
+//       //   const theAct= await Activity.findById(activityId)
+//       //   activities_arr.push(theAct)
+//       // }
+//       tripsArr.push({ ...trip._doc, destination: theDest });
+//       // console.log(tripsArr.length)
+//     }
+
+//     // console.log(tripsArr)
+
+//     // const trips = await Trip.find().populate('location').populate('activities');
+//     res.status(200).json({ trips: tripsArr, status: "success" });
+//   } catch (error) {
+//     console.log(error.message);
+//     res
+//       .status(500)
+//       .json({ message: "Error fetching trips", status: "fail", error });
+//   }
+// });
+
 router.get("/", async (req, res) => {
   try {
-    console.log(req.query);
-    let {
-      activities,
-      title,
-      places_visited,
-      destination,
-      locations_visited,
-      duration,
-      inclusives,
-      dates,
-      description,
-      categories,
-      price,
-      rating,
-      sort,
-      size,
-    } = req.query;
-
-    if (sort) {
-      sort = JSON.parse(sort);
-    } else {
-      sort = {};
-    }
-
-    let limit = size || 10;
-
-    // const trips=await Trip.find({ images: { $ne: [] } }).limit(limit)
-    const trips = await NewTrip.find({
-      catch_phrase: { $exists: true, $ne: "" },
-    })
-      .sort({ rating: -1, "images.length": -1 })
-      .limit(limit);
-
-    let tripsArr = [];
-    for (const trip of trips) {
-      const theDest = await Destination.findById(trip.destination);
-      let activities_arr = [];
-      // for(const activityId of trip._doc.activities){
-      //   const theAct= await Activity.findById(activityId)
-      //   activities_arr.push(theAct)
-      // }
-      tripsArr.push({ ...trip._doc, destination: theDest });
-      // console.log(tripsArr.length)
-    }
-
-    // console.log(tripsArr)
-
-    // const trips = await Trip.find().populate('location').populate('activities');
-    res.status(200).json({ trips: tripsArr, status: "success" });
+    const tripsArr = await Trip.find();
+    res.status(200).json({ status: "success", trips: tripsArr });
   } catch (error) {
-    console.log(error.message);
-    res
-      .status(500)
-      .json({ message: "Error fetching trips", status: "fail", error });
+    console.error("Error fetching trips:", error);
+    res.status(500).json({ message: "Error fetching trips" });
   }
 });
 
@@ -78,8 +88,11 @@ router.get("/destinations", async (req, res) => {
 
 // Get a specific trip by ID
 router.get("/:id", async (req, res) => {
+  const tripId = req.params.id;
+  console.log("get request reached:", tripId);
   try {
-    const trip = await NewTrip.findById(req.params.id);
+    const trip = await Trip.findById(tripId);
+    console.log(trip);
     if (!trip) return res.status(404).json({ message: "Trip not found" });
     let activities = [];
     // for(const actId of trip.activities){

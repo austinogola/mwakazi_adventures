@@ -33,22 +33,34 @@ const EditTrip = () => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
+    const fetchTripDetails = async (id) => {
+      try {
+        const response = await axios.get(`${serverUrl}/api/v1/trips/${id}`);
+        setTrip(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.error("Error fetching trip:", err);
+        setError("Failed to load trip details. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     if (tripId) {
       fetchTripDetails(tripId);
+    } else {
+      setError("No trip ID provided.");
+      setIsLoading(false);
     }
-  }, [tripId]);
+  }, [tripId, serverUrl]);
 
-  const fetchTripDetails = async (id) => {
-    try {
-      const res = await axios.get(`${serverUrl}/api/v1/trips/${id}`);
-      setTrip(res.data);
-      setIsLoading(false);
-    } catch (err) {
-      console.error("Error fetching trip:", err);
-      setError("Failed to load trip details.");
-      setIsLoading(false);
-    }
-  };
+  if (isLoading) {
+    return <div>Loading trip details...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
