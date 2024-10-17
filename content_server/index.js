@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-
+const invoiceRoutes = require("./routes/invoices");
 const tripRoutes = require("./routes/trips");
 const authRoutes = require("./routes/auth");
 const bookingRoutes = require("./routes/bookings");
@@ -44,6 +44,7 @@ app.use((req, res, next) => {
 // Define routes
 app.use("/api/v1/trips", tripRoutes);
 app.use("/api/v1/bookings", bookingRoutes);
+app.use("/api/v1/invoices", invoiceRoutes);
 app.use("/api/v1/activities", activitiesRoutes);
 app.use("/api/v1/accommodations", accommodationsRoutes);
 app.use("/auth", authRoutes);
