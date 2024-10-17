@@ -1,5 +1,6 @@
 const express = require('express');
 const Trip = require('../models/Trip');
+const NewTrip = require('../models/NewTrip');
 const Booking = require('../models/Booking'); // Import the Booking model
 const Accommodation = require('../models/Accommodation'); // Import the Accommodation model
 const { verifyToken, isAdmin } = require('../middleware/auth'); // Authentication middleware
@@ -36,7 +37,7 @@ router.post('/', verifyToken, async (req, res) => {
     let newBooking;
 
     if (trip) {
-        const theTrip = await Trip.findById(trip);
+        const theTrip = await NewTrip.findById(trip);
         newBooking = new Booking({
             account: req.user.id, // Use the authenticated user's account ID
             trip,
@@ -70,7 +71,7 @@ router.post('/init',async (req, res) => {
     const { trip, isPaid ,customer,accommodation,days,guests,startDate,endDate} = req.body;
     let newBooking;
     if (trip) {
-      const theTrip = await Trip.findById(trip);
+      const theTrip = await NewTrip.findById(trip);
       newBooking = new Booking({
         // account: req.user.id, // Use the authenticated user's account ID
         trip,
@@ -124,7 +125,7 @@ router.post('/init',async (req, res) => {
 router.get('/status/:id',async(req,res)=>{
     const {id}=req.params
     const theBooking = await Booking.findById(id)
-    const theTrip=await Trip.findById(theBooking.trip)
+    const theTrip=await NewTrip.findById(theBooking.trip)
     // let status=await getOrderStatus(theBooking.orderId)
     // console.log(status)
     console.log(theTrip);

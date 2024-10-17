@@ -139,9 +139,9 @@ const BookingPage = () => {
                   type="number"
                   id="days"
                   name="days"
-                  value={formData.days || 1}
+                  value={formData.days}
+                  min={1}
                   onChange={handleInputChange}
-                  min="1"
                   required
                   style={{ width: '50px', display: 'inline-block' ,marginBottom:'20px'}}
                 />
@@ -156,10 +156,10 @@ const BookingPage = () => {
                   type="number"
                   id="guests"
                   name="guests"
-                  value={formData.guests || 1}
+                  value={formData.guests}
                   onChange={handleInputChange}
-                  min="1"
                   required
+                  min={1}
                   style={{ width: '50px' }}
                 />
               </div>

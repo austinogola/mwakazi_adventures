@@ -68,7 +68,7 @@ const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
   try {
-    const tripsArr = await Trip.find();
+    const tripsArr = await NewTrip.find();
     res.status(200).json({ status: "success", trips: tripsArr });
   } catch (error) {
     console.error("Error fetching trips:", error);
@@ -91,7 +91,7 @@ router.get("/:id", async (req, res) => {
   const tripId = req.params.id;
   console.log("get request reached:", tripId);
   try {
-    const trip = await Trip.findById(tripId);
+    const trip = await NewTrip.findById(tripId);
     console.log(trip);
     if (!trip) return res.status(404).json({ message: "Trip not found" });
     let activities = [];
@@ -182,7 +182,7 @@ router.post("/addNewTrip", async (req, res) => {
         : [];
 
     // Create new trip
-    const newTrip = new Trip({
+    const newTrip = new NewTrip({
       activities: activityIds,
       destination: destId,
       title,
@@ -269,7 +269,7 @@ router.put("/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid trip ID format." });
     }
 
-    const existingTrip = await Trip.findById(tripId);
+    const existingTrip = await NewTrip.findById(tripId);
     if (!existingTrip) {
       console.log("Trip not found for ID:", tripId);
       return res.status(404).json({ message: "Trip not found" });

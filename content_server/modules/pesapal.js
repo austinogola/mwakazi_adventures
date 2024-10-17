@@ -1,5 +1,6 @@
 const Booking = require('../models/Booking');
 const Trip = require('../models/Trip');
+const NewTrip = require('../models/NewTrip');
 const Accommodation = require('../models/Accommodation');
 
 const dotenv = require('dotenv');
@@ -124,8 +125,8 @@ const initBooking=async(booking,token,ipn_id)=>{
             id:_id,currency,
             amount:total_price,
             description:title,
-            callback_url:`${WebHost}/booking/info?id=${_id}`,
-            cancellation_url:`${WebHost}/booking/info?id=${_id}`,
+            callback_url:`${WebHost}`,
+            cancellation_url:`${WebHost}`,
             notification_id:ipn_id,
             billing_address:{
                 "email_address":customer.email,
@@ -142,6 +143,7 @@ const initBooking=async(booking,token,ipn_id)=>{
                 
             }
         }
+        
 
         fetch(theProdUrl,{
             method:'POST',
