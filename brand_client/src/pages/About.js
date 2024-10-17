@@ -1,12 +1,13 @@
 
 import Header from "../components/Header"
+import NewHeader from "../components/NewHeader"
 import Navbar from "../components/Navbar"
 import ResponsiveFooter from "../components/ResponsiveFooter"
 import '../styles/About.css'
 const About=()=>{
     return (
         <div>
-            <Header/>
+            <NewHeader/>
             <Navbar/>
             <div className="about_section">
                 <h2 className="title">About Us</h2>
