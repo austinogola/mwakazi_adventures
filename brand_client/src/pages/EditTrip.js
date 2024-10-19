@@ -7,37 +7,42 @@ import SideMenu from "../components/SideMenu";
 
 const EditTrip = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tripId = searchParams.get("id");
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [destination, setDestination] = useState(null);
   const [trip, setTrip] = useState({
     title: "",
-    destination: { continent: "", country: "", locale: "" },
-    duration: { number: "", period: "" },
+    destination: {
+      continent: "",
+      country: "",
+      locale: "",
+    },
+    places_visited: [],
+    duration: { number: "", period: "days" },
+    highlights: [],
     inclusives: [],
     exclusives: [],
     images: [],
-    dates: "",
+    dates: [],
     description: "",
     catch_phrase: "",
-    itinerary: [],
+    itinerary: [{ title: "", points: [] }],
     categories: [],
     blog_contents: [],
     activities: [],
     price: 0,
     rating: 1,
-    highlights: [],
-    places_visited: [{ continent: "", country: "", locale: "" }],
   });
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchParams] = useSearchParams();
-  const tripId = searchParams.get("id");
-  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     const fetchTripDetails = async (id) => {
       try {
         const response = await axios.get(`${serverUrl}/api/v1/trips/${id}`);
-        setTrip(response.data);
-        console.log(response.data);
+        setTrip(response.data.trip);
+        setDestination(response.data.destination);
       } catch (err) {
         console.error("Error fetching trip:", err);
         setError("Failed to load trip details. Please try again later.");
@@ -54,24 +59,23 @@ const EditTrip = () => {
     }
   }, [tripId, serverUrl]);
 
-  if (isLoading) {
-    return <div>Loading trip details...</div>;
-  }
-
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes(".")) {
-      const [parent, child] = name.split(".");
+    const nameParts = name.split(".");
+
+    if (nameParts.length === 2) {
       setTrip((prevState) => ({
         ...prevState,
-        [parent]: { ...prevState[parent], [child]: value },
+        [nameParts[0]]: {
+          ...prevState[nameParts[0]],
+          [nameParts[1]]: value,
+        },
       }));
     } else {
-      setTrip((prevState) => ({ ...prevState, [name]: value }));
+      setTrip((prevState) => ({
+        ...prevState,
+        [name]: name === "rating" || name === "price" ? parseInt(value) : value,
+      }));
     }
   };
 
@@ -90,9 +94,67 @@ const EditTrip = () => {
     }));
   };
 
+  const addPlaceVisited = () => {
+    setTrip((prevState) => ({
+      ...prevState,
+      places_visited: [
+        ...prevState.places_visited,
+        { continent: "", country: "", locale: "" },
+      ],
+    }));
+  };
+
+  const handlePlaceVisitedChange = (index, field, value) => {
+    setTrip((prevState) => {
+      const updatedPlacesVisited = [...prevState.places_visited];
+      updatedPlacesVisited[index] = {
+        ...updatedPlacesVisited[index],
+        [field]: value,
+      };
+      return { ...prevState, places_visited: updatedPlacesVisited };
+    });
+  };
+
+  const addItineraryItem = () => {
+    setTrip((prevState) => ({
+      ...prevState,
+      itinerary: [...prevState.itinerary, { title: "", points: [""] }],
+    }));
+  };
+
+  const addPointToItinerary = (index) => {
+    setTrip((prevState) => {
+      const updatedItinerary = prevState.itinerary.map((item, i) => {
+        if (i === index) {
+          return {
+            ...item,
+            points: [...item.points, ""],
+          };
+        }
+        return item;
+      });
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
+  const handleTitleChange = (index, value) => {
+    setTrip((prevState) => {
+      const updatedItinerary = [...prevState.itinerary];
+      updatedItinerary[index].title = value;
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
+  const handlePointsChange = (index, pointIndex, value) => {
+    setTrip((prevState) => {
+      const updatedItinerary = [...prevState.itinerary];
+      updatedItinerary[index].points[pointIndex] = value;
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
   const handleUpdateTrip = async () => {
     try {
-      console.log("Sending trip data:", trip);
       const response = await axios.put(
         `${serverUrl}/api/v1/trips/${tripId}`,
         trip
@@ -108,33 +170,31 @@ const EditTrip = () => {
     }
   };
 
-  const handlePlaceVisitedChange = (index, field, value) => {
-    setTrip((prevState) => {
-      const updatedPlacesVisited = [...prevState.places_visited];
-      updatedPlacesVisited[index] = {
-        ...updatedPlacesVisited[index],
-        [field]: value,
-      };
-      return { ...prevState, places_visited: updatedPlacesVisited };
-    });
-  };
-
-  const addPlaceVisited = () => {
-    setTrip((prevState) => ({
-      ...prevState,
-      places_visited: [
-        ...prevState.places_visited,
-        { continent: "", country: "", locale: "" },
-      ],
-    }));
-  };
+  const renderArrayInputs = (label, name) => (
+    <div>
+      <label>{label}</label>
+      {trip[name].map((item, index) => (
+        <input
+          key={index}
+          type="text"
+          value={item}
+          onChange={(e) => handleArrayInputChange(name, index, e.target.value)}
+        />
+      ))}
+      <button type="button" onClick={() => addToArrayField(name)}>
+        Add {label}
+      </button>
+    </div>
+  );
 
   const renderPlacesVisitedInputs = () => (
     <div>
+      <label>Places Visited</label>
       {trip.places_visited.map((place, index) => (
         <div key={index} className="places-visited-inputs">
           <input
             type="text"
+            name={`continent`}
             placeholder="Continent"
             value={place.continent}
             onChange={(e) =>
@@ -143,6 +203,7 @@ const EditTrip = () => {
           />
           <input
             type="text"
+            name={`country`}
             placeholder="Country"
             value={place.country}
             onChange={(e) =>
@@ -151,6 +212,7 @@ const EditTrip = () => {
           />
           <input
             type="text"
+            name={`locale`}
             placeholder="Locale"
             value={place.locale}
             onChange={(e) =>
@@ -161,6 +223,88 @@ const EditTrip = () => {
       ))}
       <button type="button" onClick={addPlaceVisited}>
         Add Place Visited
+      </button>
+    </div>
+  );
+
+  const renderDestinationInputs = () => (
+    <div>
+      <label>Destination</label>
+      <input
+        type="text"
+        name="destination.continent"
+        placeholder="Continent"
+        value={destination.continent}
+        onChange={handleInputChange}
+        required
+      />
+      <input
+        type="text"
+        name="destination.country"
+        placeholder="Country"
+        value={destination.country}
+        onChange={handleInputChange}
+        required
+      />
+      <input
+        type="text"
+        name="destination.locale"
+        placeholder="Locale"
+        value={destination.locale}
+        onChange={handleInputChange}
+        required
+      />
+    </div>
+  );
+
+  const renderDateInputs = () => (
+    <div>
+      <label>Dates</label>
+      {trip.dates.map((date, index) => (
+        <input
+          key={index}
+          type="date"
+          value={date}
+          onChange={(e) =>
+            handleArrayInputChange("dates", index, e.target.value)
+          }
+        />
+      ))}
+      <button type="button" onClick={() => addToArrayField("dates")}>
+        Add Date
+      </button>
+    </div>
+  );
+
+  const renderItineraryInputs = () => (
+    <div>
+      <label>Itinerary</label>
+      {trip.itinerary.map((item, index) => (
+        <div key={index} className="itinerary-item">
+          <input
+            type="text"
+            placeholder="Title"
+            value={item.title}
+            onChange={(e) => handleTitleChange(index, e.target.value)}
+          />
+          {item.points.map((point, pointIndex) => (
+            <input
+              key={pointIndex}
+              type="text"
+              value={point}
+              placeholder="Point"
+              onChange={(e) =>
+                handlePointsChange(index, pointIndex, e.target.value)
+              }
+            />
+          ))}
+          <button type="button" onClick={() => addPointToItinerary(index)}>
+            Add Point
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={addItineraryItem}>
+        Add Itinerary
       </button>
     </div>
   );
@@ -191,6 +335,7 @@ const EditTrip = () => {
                 required
               />
             </div>
+            {renderDestinationInputs()}
             <div>
               <label>Description</label>
               <textarea
@@ -200,73 +345,42 @@ const EditTrip = () => {
               />
             </div>
             <div>
-              <label>Continent</label>
-              <input
-                type="text"
-                name="destination.continent"
-                value={trip.destination.continent}
-                onChange={handleInputChange}
-              />
-              <label>Country</label>
-              <input
-                type="text"
-                name="destination.country"
-                value={trip.destination.country}
-                onChange={handleInputChange}
-              />
-              <label>Locale</label>
-              <input
-                type="text"
-                name="destination.locale"
-                value={trip.destination.locale}
+              <label>Catch Phrase</label>
+              <textarea
+                name="catch_phrase"
+                value={trip.catch_phrase}
                 onChange={handleInputChange}
               />
             </div>
             <div>
               <label>Duration</label>
-              <input
-                type="number"
-                name="duration.number"
-                placeholder="Number"
-                value={trip.duration.number}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="text"
-                name="duration.period"
-                placeholder="Period (e.g., days, weeks)"
-                value={trip.duration.period}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            {[
-              "inclusives",
-              "exclusives",
-              "images",
-              "itinerary",
-              "blog_contents",
-              "categories",
-              "highlights",
-            ].map((field) => (
-              <div key={field}>
-                <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                {trip[field].map((item, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    value={item}
-                    onChange={(e) =>
-                      handleArrayInputChange(field, index, e.target.value)
-                    }
-                  />
-                ))}
-                <button type="button" onClick={() => addToArrayField(field)}>
-                  Add {field.charAt(0).toUpperCase() + field.slice(1)}
-                </button>
+              <div className="duration_box">
+                <input
+                  type="number"
+                  name="duration.number"
+                  value={trip.duration.number}
+                  onChange={handleInputChange}
+                />
+                <select
+                  name="duration.period"
+                  value={trip.duration.period}
+                  onChange={handleInputChange}
+                >
+                  <option value="days">days</option>
+                  <option value="weeks">weeks</option>
+                  <option value="months">months</option>
+                </select>
               </div>
-            ))}
+            </div>
+            {renderArrayInputs("Highlights", "highlights")}
+            {renderArrayInputs("Inclusives", "inclusives")}
+            {renderArrayInputs("Exclusives", "exclusives")}
+            {renderArrayInputs("Images", "images")}
+            {renderDateInputs()}
+            {renderArrayInputs("Categories", "categories")}
+            {renderArrayInputs("Blog Contents", "blog_contents")}
+            {renderArrayInputs("Activities", "activities")}
+            {renderItineraryInputs()}
             {renderPlacesVisitedInputs()}
             <div>
               <label>Price</label>
@@ -275,7 +389,6 @@ const EditTrip = () => {
                 name="price"
                 value={trip.price}
                 onChange={handleInputChange}
-                required
               />
             </div>
             <div>
@@ -283,13 +396,13 @@ const EditTrip = () => {
               <input
                 type="number"
                 name="rating"
+                min="1"
+                max="5"
                 value={trip.rating}
                 onChange={handleInputChange}
-                min="0"
-                max="5"
               />
             </div>
-            <button type="submit">Save Changes</button>
+            <button type="submit">Update Trip</button>
           </form>
         </div>
       </div>

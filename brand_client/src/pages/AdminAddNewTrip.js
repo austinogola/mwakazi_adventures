@@ -143,6 +143,44 @@ const AddNewTrip = () => {
     });
   };
 
+  const addItineraryItem = () => {
+    setNewTrip((prevState) => ({
+      ...prevState,
+      itinerary: [...prevState.itinerary, { title: "", points: [""] }],
+    }));
+  };
+
+  const addPointToItinerary = (index) => {
+    setNewTrip((prevState) => {
+      const updatedItinerary = prevState.itinerary.map((item, i) => {
+        if (i === index) {
+          return {
+            ...item,
+            points: [...item.points, ""],
+          };
+        }
+        return item;
+      });
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
+  const handleTitleChange = (index, value) => {
+    setNewTrip((prevState) => {
+      const updatedItinerary = [...prevState.itinerary];
+      updatedItinerary[index].title = value;
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
+  const handlePointsChange = (index, pointIndex, value) => {
+    setNewTrip((prevState) => {
+      const updatedItinerary = [...prevState.itinerary];
+      updatedItinerary[index].points[pointIndex] = value;
+      return { ...prevState, itinerary: updatedItinerary };
+    });
+  };
+
   const renderItineraryInputs = () => (
     <div>
       <label>Itinerary</label>
@@ -152,27 +190,27 @@ const AddNewTrip = () => {
             type="text"
             placeholder="Title"
             value={item.title}
-            onChange={(e) =>
-              handleArrayInputChange("itinerary", index, {
-                ...item,
-                title: e.target.value,
-              })
-            }
+            onChange={(e) => handleTitleChange(index, e.target.value)}
+            required
           />
-          <input
-            type="text"
-            placeholder="Points (comma separated)"
-            value={item.points ? item.points.join(", ") : ""}
-            onChange={(e) =>
-              handleArrayInputChange("itinerary", index, {
-                ...item,
-                points: e.target.value.split(", ").map((point) => point.trim()),
-              })
-            }
-          />
+          {item.points.map((point, pointIndex) => (
+            <input
+              key={pointIndex}
+              type="text"
+              value={point}
+              placeholder="Point"
+              onChange={(e) =>
+                handlePointsChange(index, pointIndex, e.target.value)
+              }
+              required
+            />
+          ))}
+          <button type="button" onClick={() => addPointToItinerary(index)}>
+            Add Point
+          </button>
         </div>
       ))}
-      <button type="button" onClick={() => addToArrayField("itinerary")}>
+      <button type="button" onClick={addItineraryItem}>
         Add Itinerary
       </button>
     </div>

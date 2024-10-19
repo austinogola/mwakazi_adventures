@@ -214,6 +214,152 @@ router.post("/addNewTrip", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  console.log("PUT request received for ID:", req.params.id);
+  console.log("Request Body:", req.body);
+
+  try {
+    const tripId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      console.log("Invalid trip ID format:", tripId);
+      return res.status(422).json({ message: "Invalid trip ID format." });
+    }
+
+    const existingTrip = await NewTrip.findById(tripId);
+    if (!existingTrip) {
+      console.log("Trip not found for ID:", tripId);
+      return res.status(404).json({ message: "Trip not found" });
+    }
+
+    const {
+      title,
+      destination,
+      duration,
+      inclusives,
+      exclusives,
+      images,
+      dates,
+      description,
+      catch_phrase,
+      itinerary,
+      categories,
+      blog_contents,
+      activities,
+      price,
+      rating,
+      places_visited = [],
+      highlights,
+    } = req.body;
+
+    if (!title || !destination || !duration || !dates || !price) {
+      console.log("Missing required details");
+      return res.status(422).json({
+        message: "Error updating trip. Missing required details.",
+        missingFields: [
+          "title",
+          "destination",
+          "duration",
+          "dates",
+          "price",
+        ].filter((field) => !req.body[field]),
+      });
+    }
+
+    const { country, continent, locale } = destination;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const destId = await Destination.findOneAndUpdate(
+        { country, continent, locale },
+        { country, continent, locale },
+        { new: true, upsert: true, session }
+      );
+
+      if (!destId) {
+        throw new Error("Destination could not be created or found");
+      }
+
+      const placesIds = await Promise.all(
+        places_visited.map(async (place) => {
+          const visitedPlace = await Destination.findOneAndUpdate(
+            {
+              country: place.country,
+              continent: place.continent,
+              locale: place.locale,
+            },
+            {
+              country: place.country,
+              continent: place.continent,
+              locale: place.locale,
+            },
+            { new: true, upsert: true, session }
+          );
+          return visitedPlace._id;
+        })
+      );
+
+      // Handle activities
+      let activityIds = [];
+      if (activities && activities.length > 0) {
+        activityIds = await Promise.all(
+          activities.map(async (activityName) => {
+            const activity = await Activity.findOneAndUpdate(
+              { name: activityName },
+              { name: activityName },
+              { new: true, upsert: true, session }
+            );
+            return activity._id;
+          })
+        );
+      }
+
+      const updatedTrip = await NewTrip.findByIdAndUpdate(
+        tripId,
+        {
+          title,
+          destination: destId._id,
+          duration,
+          inclusives,
+          exclusives,
+          images,
+          dates,
+          description,
+          catch_phrase,
+          itinerary,
+          categories,
+          blog_contents,
+          activities: activityIds,
+          price,
+          rating,
+          places_visited: placesIds,
+          highlights,
+        },
+        { new: true, session }
+      ).populate("destination places_visited activities");
+
+      if (!updatedTrip) {
+        throw new Error("Failed to update the trip");
+      }
+
+      await session.commitTransaction();
+      res.status(200).json({ updatedTrip, status: "updated successfully" });
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  } catch (error) {
+    console.error("Error updating trip:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating trip", error: error.message });
+  }
+});
+
 router.post("/addDestination", async (req, res) => {
   try {
     const { country, continent, locale } = req.body;
@@ -254,140 +400,6 @@ router.post("/addDestination", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error creating destination", error: error.message });
-  }
-});
-
-router.put("/:id", async (req, res) => {
-  console.log("PATCH API reached");
-  console.log("PATCH request received for ID:", req.params.id);
-  console.log("Request Body:", req.body);
-
-  try {
-    const tripId = req.params.id;
-
-    // if (!mongoose.Types.ObjectId.isValid(tripId)) {
-    //   console.log("Invalid trip ID format:", tripId);
-    //   return res.status(400).json({ message: "Invalid trip ID format." });
-    // }
-
-    const existingTrip = await NewTrip.findById(tripId);
-    if (!existingTrip) {
-      console.log("Trip not found for ID:", tripId);
-      return res.status(404).json({ message: "Trip not found" });
-    }
-
-    const {
-      title,
-      destination,
-      duration,
-      inclusives,
-      exclusives,
-      images,
-      dates,
-      description,
-      catch_phrase,
-      itinerary,
-      categories,
-      blog_contents,
-      activities,
-      price,
-      rating,
-      places_visited = [],
-      highlights,
-    } = req.body;
-
-    // Validate required fields
-    if (!title || !destination || !duration || !dates || !price) {
-      console.log("Missing required details...");
-      return res.status(400).json({
-        message: "Error updating trip. Missing required details.",
-      });
-    }
-
-    // Further processing of destination and places
-    const { country, continent, locale } = destination;
-
-    // Log destination details
-    console.log("Destination details:", { country, continent, locale });
-
-    const destId = await Destination.findOneAndUpdate(
-      { country, continent, locale },
-      { country, continent, locale },
-      { new: true, upsert: true }
-    );
-
-    if (!destId) {
-      console.log("Destination could not be created or found");
-      return res.status(400).json({ message: "Invalid destination" });
-    }
-
-    let placesIds = existingTrip.places_visited;
-
-    // Log existing places IDs
-    console.log("Existing places IDs:", placesIds);
-
-    if (places_visited && places_visited.length > 0) {
-      const existingPlacesMap = new Map();
-      for (const id of placesIds) {
-        existingPlacesMap.set(id.toString(), true);
-      }
-
-      const newPlacesIds = [];
-
-      for (const place of places_visited) {
-        const { country, continent, locale } = place;
-
-        const visitedPlace = await Destination.findOneAndUpdate(
-          { country, continent, locale },
-          { country, continent, locale },
-          { new: true, upsert: true }
-        );
-
-        newPlacesIds.push(visitedPlace._id);
-      }
-
-      placesIds = [...new Set([...newPlacesIds, ...placesIds])];
-    }
-
-    // Log the final places IDs before updating
-    console.log("Final places IDs:", placesIds);
-
-    // Update the trip
-    const updatedTrip = await NewTrip.findByIdAndUpdate(
-      tripId,
-      {
-        title,
-        destination: destId._id,
-        duration,
-        inclusives,
-        exclusives,
-        images,
-        dates,
-        description,
-        catch_phrase,
-        itinerary,
-        categories,
-        blog_contents,
-        activities,
-        price,
-        rating,
-        places_visited: placesIds,
-        highlights,
-      },
-      { new: true }
-    ).populate("destination places_visited blog_contents activities");
-
-    if (!updatedTrip) {
-      console.log("Failed to update the trip with ID:", tripId);
-      return res.status(404).json({ message: "Trip not found" });
-    }
-
-    res.status(200).json({ updatedTrip, status: "updated successfully" });
-  } catch (error) {
-    console.error("Error updating trip:", error);
-    res
-      .status(500)
-      .json({ message: "Error updating trip", error: error.message });
   }
 });
 
