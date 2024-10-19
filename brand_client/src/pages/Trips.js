@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import ResponsiveFooter from '../components/ResponsiveFooter';
-import Header from '../components/Header';
-import NewHeader from "../components/NewHeader"
+import React, { useEffect, useState, useCallback } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import ResponsiveFooter from "../components/ResponsiveFooter";
+import Header from "../components/Header";
+import NewHeader from "../components/NewHeader";
 
 // Styled components (unchanged)
 
@@ -46,7 +46,7 @@ const Info = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #F6A214;
+  background-color: #f6a214;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -57,7 +57,7 @@ const Button = styled.button`
 `;
 
 const Button2 = styled.button`
-  background-color: #007BFF;
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -83,27 +83,25 @@ const Trips = () => {
   // const serverUrl = 'http://localhost:5010';
   // const serverUrl = 'https://server.mwakaziadventures.com';
 
-  const serverUrl=process.env.REACT_APP_SERVER_URL
-  console.log(serverUrl)
-
-  
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  console.log(serverUrl);
 
   useEffect(() => {
-    const fetchTrips = (async () => {
+    const fetchTrips = async () => {
       try {
         const res = await fetch(`${serverUrl}/api/v1/trips?size=10`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         });
         const response = await res.json();
-        console.log(response)
+        console.log(response);
         setTripItems(response.trips);
       } catch (error) {
-        console.error('Error fetching trips:', error);
+        console.error("Error fetching trips:", error);
       } finally {
         setIsLoading(false);
       }
-    });
+    };
     fetchTrips();
   }, []);
 
@@ -119,15 +117,17 @@ const Trips = () => {
     const date = new Date(dateString);
 
     // Format the given date
-    const formattedDate = date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    }).replace(',', '');
+    const formattedDate = date
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(",", "");
 
     // If no range object is provided, return the formatted date
     if (!rangeObj) {
-        return formattedDate;
+      return formattedDate;
     }
 
     // Determine the period to add (days, weeks, months, etc.)
@@ -135,35 +135,38 @@ const Trips = () => {
     const { period, number } = rangeObj;
 
     switch (period) {
-        case 'days':
-            endDate.setDate(endDate.getDate() + number);
-            break;
-        case 'weeks':
-            endDate.setDate(endDate.getDate() + number * 7);
-            break;
-        case 'months':
-            endDate.setMonth(endDate.getMonth() + number);
-            break;
-        case 'years':
-            endDate.setFullYear(endDate.getFullYear() + number);
-            break;
-        default:
-            throw new Error('Invalid period. Use "days", "weeks", "months", or "years".');
+      case "days":
+        endDate.setDate(endDate.getDate() + number);
+        break;
+      case "weeks":
+        endDate.setDate(endDate.getDate() + number * 7);
+        break;
+      case "months":
+        endDate.setMonth(endDate.getMonth() + number);
+        break;
+      case "years":
+        endDate.setFullYear(endDate.getFullYear() + number);
+        break;
+      default:
+        throw new Error(
+          'Invalid period. Use "days", "weeks", "months", or "years".'
+        );
     }
 
     // Format the end date
-    const formattedEndDate = endDate.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    }).replace(',', '');
+    const formattedEndDate = endDate
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(",", "");
 
     // Return the date range
     return `${formattedDate} - ${formattedEndDate}`;
-}
+  }
 
-// Example usage:
-
+  // Example usage:
 
   if (isLoading) {
     return <LoadingScreen>Loading trips...</LoadingScreen>;
@@ -171,22 +174,15 @@ const Trips = () => {
 
   return (
     <div>
-    <NewHeader/>
+      <NewHeader />
       <Navbar />
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: "center" }}>
         <h2>Our Trips</h2>
       </div>
       <Container>
-        {tripItems.map(trip => (
+        {tripItems.map((trip) => (
           <Card key={trip._id}>
-            <Image
-              src={trip.images[0]}
-              alt={trip.title}
-              loading="lazy"
-              onError={(e) => {
-                e.target.src = '/placeholder-image.jpg'; // Replace with your placeholder image
-              }}
-            />
+            <Image src={trip.images[0]} alt={trip.title} loading="lazy" />
             <Content>
               <Title>{trip.title}</Title>
               <Info>

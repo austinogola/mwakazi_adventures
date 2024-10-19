@@ -92,9 +92,10 @@ router.get("/:id", async (req, res) => {
   console.log("get request reached:", tripId);
   try {
     const trip = await NewTrip.findById(tripId);
+    const destination = await Destination.findById(trip.destination);
     console.log(trip);
     if (!trip) return res.status(404).json({ message: "Trip not found" });
-    let activities = [];
+    // let activities = [];
     // for(const actId of trip.activities){
     //   let theAct= await Activity.findById(actId)
     //   activities.push(theAct)
@@ -102,7 +103,7 @@ router.get("/:id", async (req, res) => {
 
     // trip.activities=activities
 
-    res.status(200).json(trip);
+    res.status(200).json({ trip: trip, destination: destination });
   } catch (error) {
     res.status(500).json({ message: "Error fetching trip", error });
   }
