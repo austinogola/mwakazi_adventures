@@ -19,6 +19,7 @@ import AdminActivities from "./pages/AdminActivities";
 import AdminDests from "./pages/AdminDests";
 import EditTrip from "./pages/EditTrip";
 import EditDestination from "./pages/editDestination";
+import AdminInvoices from "./pages/AdminInvoices";
 // import HomePage from './pages/HomePage';
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="admin/destinations" element={<AdminDests />} />
         <Route path="admin/edit-trip" element={<EditTrip />} />
         <Route path="admin/edit-destination" element={<EditDestination />} />
+        <Route path="admin/invoices" element={<AdminInvoices />} />
         {/* <Route path="/destinations" element={<Destinations />} />
         <Route path="/trips" element={<Trips />} />
         <Route path="/contact" element={<Contact />} />

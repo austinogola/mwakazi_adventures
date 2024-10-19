@@ -1,0 +1,110 @@
+.adminInvoices_parentDiv {
+  display: flex;
+  gap: 2rem;
+}
+
+.adminInvoices-container {
+  width: 75%;
+  margin: 1rem auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.adminInvoices-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.adminInvoices-form-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 15px;
+}
+
+.adminInvoices-form-group label {
+  display: block;
+  font-weight: bold;
+  color: #333;
+  width: 20rem;
+}
+
+.adminInvoices-form-group span {
+  color: red;
+}
+
+.adminInvoices-form-group input,
+.adminInvoices-form-group select,
+.adminInvoices-form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.adminInvoices-form-group textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.adminInvoices-amount {
+  display: flex;
+  align-items: center;
+}
+
+.adminInvoices-amount select {
+  width: 80px;
+  margin-right: 10px;
+}
+
+.adminInvoices-due-date {
+  display: flex;
+  align-items: center;
+}
+
+.adminInvoices-due-date span {
+  margin: 0 10px;
+}
+
+.adminInvoices-generate-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.adminInvoices-generate-btn:hover {
+  background-color: #0056b3;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background-color: #333;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
