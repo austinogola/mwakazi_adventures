@@ -150,18 +150,18 @@ const TripPage = ({ tripId }) => {
 
       <div className="info-cards">
         <div className="info-card">
-          <h3>Inclusions</h3>
+          <h3>Inclusives</h3>
           <ul>
-            {/* {tripData.inclusives.length > 0 ? (
+            {tripData.inclusives.length > 0 ? (
               tripData.inclusives.map((item, index) => <li key={index}>{item}</li>)
             ) : (
               <li>Information not available</li>
-            )} */}
+            )}
           </ul>
         </div>
 
-        <div className="info-card">
-          <h3>Exclusions</h3>
+        {/* <div className="info-card"> */}
+          {/* <h3>Exclusions</h3> */}
           {/* <ul>
             {tripData.exclusives.length > 0 ? (
               tripData.exclusives.map((item, index) => <li key={index}>{item})
@@ -169,7 +169,7 @@ const TripPage = ({ tripId }) => {
               <li>Information not available</li>
             )}
           </ul> */}
-        </div>
+        {/* </div> */}
 
         <div className="info-card">
           <h3>Activities</h3>
