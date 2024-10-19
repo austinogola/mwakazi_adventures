@@ -75,7 +75,8 @@ const LoadingScreen = styled.div`
   color: #333;
 `;
 
-const navigate = useNavigate();
+const Trips = () => {
+  const navigate = useNavigate();
   const [tripItems, setTripItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
