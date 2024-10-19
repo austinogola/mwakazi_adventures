@@ -34,6 +34,7 @@ const TripPage = ({ tripId }) => {
   // let serverUrl='https://server.mwakaziadventures.com'
   // const serverUrl = 'http://localhost:5010';
   const serverUrl=process.env.REACT_APP_SERVER_URL
+  console.log(serverUrl)
   useEffect(() => {
     const fetchTripData = async () => {
       try {
@@ -101,7 +102,7 @@ const TripPage = ({ tripId }) => {
         </div>
         <div className="info-item">
           <span className="icon">📍</span>
-          <span>South Africa</span>
+          <span>{tripData.destination}</span>
         </div>
         <div className="info-item">
           <span className="icon">⭐</span>
@@ -125,7 +126,7 @@ const TripPage = ({ tripId }) => {
       <section className="trip-section">
         <h2>Itinerary</h2>
         <ul className="itinerary-list">
-          {tripData.itinerary.map((item, index) => (
+          {/* {tripData.itinerary.map((item, index) => (
             <li key={index}>
               <strong>{item.title}</strong>
               <ul>
@@ -134,16 +135,16 @@ const TripPage = ({ tripId }) => {
                 ))}
               </ul>
             </li>
-          ))}
+          ))} */}
         </ul>
       </section>
 
       <section className="trip-section">
         <h2>Categories</h2>
         <div className="categories-list">
-          {tripData.categories.map((category, index) => (
+          {/* {tripData.categories.map((category, index) => (
             <span key={index} className="category-badge">{category}</span>
-          ))}
+          ))} */}
         </div>
       </section>
 
@@ -151,11 +152,11 @@ const TripPage = ({ tripId }) => {
         <div className="info-card">
           <h3>Inclusions</h3>
           <ul>
-            {tripData.inclusives.length > 0 ? (
+            {/* {tripData.inclusives.length > 0 ? (
               tripData.inclusives.map((item, index) => <li key={index}>{item}</li>)
             ) : (
               <li>Information not available</li>
-            )}
+            )} */}
           </ul>
         </div>
 
@@ -173,9 +174,9 @@ const TripPage = ({ tripId }) => {
         <div className="info-card">
           <h3>Activities</h3>
           <ul>
-            {tripData.activities.map((activity, index) => (
+            {/* {tripData.activities.map((activity, index) => (
               <li key={index}> {activity.name}</li>
-            ))}
+            ))} */}
           </ul>
         </div>
       </div>

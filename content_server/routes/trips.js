@@ -264,10 +264,10 @@ router.put("/:id", async (req, res) => {
   try {
     const tripId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(tripId)) {
-      console.log("Invalid trip ID format:", tripId);
-      return res.status(400).json({ message: "Invalid trip ID format." });
-    }
+    // if (!mongoose.Types.ObjectId.isValid(tripId)) {
+    //   console.log("Invalid trip ID format:", tripId);
+    //   return res.status(400).json({ message: "Invalid trip ID format." });
+    // }
 
     const existingTrip = await NewTrip.findById(tripId);
     if (!existingTrip) {
@@ -352,7 +352,7 @@ router.put("/:id", async (req, res) => {
     console.log("Final places IDs:", placesIds);
 
     // Update the trip
-    const updatedTrip = await Trip.findByIdAndUpdate(
+    const updatedTrip = await NewTrip.findByIdAndUpdate(
       tripId,
       {
         title,

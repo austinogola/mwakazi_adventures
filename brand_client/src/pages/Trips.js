@@ -84,6 +84,7 @@ const Trips = () => {
   // const serverUrl = 'https://server.mwakaziadventures.com';
 
   const serverUrl=process.env.REACT_APP_SERVER_URL
+  console.log(serverUrl)
 
   
 
