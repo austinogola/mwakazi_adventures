@@ -1,0 +1,124 @@
+/* AddDestination.css */
+
+.add_destination_parent_div {
+  display: flex;
+  gap: 2rem;
+}
+
+.add-destination-container {
+  font-family: Arial, sans-serif;
+  width: fit-content;
+  height: fit-content;
+  margin-top: 4rem;
+  padding: 1rem 2rem 1rem 2rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-destination-container h2 {
+  text-align: center;
+  color: #333;
+}
+
+.add-destination-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-destination-form label {
+  font-size: 16px;
+  color: #333;
+}
+
+.add-destination-form input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-destination-form input[type="text"]:focus {
+  border-color: #0066cc;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+}
+
+.add-destination-form button {
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-destination-form button:hover {
+  background-color: #218838;
+}
+
+.add-destination-container p {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.add-destination-container p.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.add-destination-container p.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.destinations-list-container {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  width: 100%;
+}
+
+.destinations-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.destinations-content h2 {
+  margin-bottom: 20px;
+}
+
+.destinations-content ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.destinations-content li {
+  background-color: #f4f4f4;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.destinations-content li h3 {
+  margin: 0 0 5px 0;
+}
+
+.error {
+  color: red;
+}

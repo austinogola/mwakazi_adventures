@@ -1,0 +1,120 @@
+.popular-destinations{
+    width:100%;
+    overflow: hidden;
+    max-width: 100%; /* 1152px */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+    margin-top: 100px;
+}
+
+.destinations-holder{
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem; /* 16px */
+}
+
+.big-holders{
+    position: relative;
+    border-radius: 0.5rem; /* 8px */
+    overflow: hidden;
+    border: 1px solid red;
+}
+
+.bigImage{
+    width: 100%;
+height: 100%;
+object-fit: cover;
+
+}
+
+.first-div{
+    position: absolute;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(to top, black, transparent);
+}
+
+.first-text{
+    font-size: 1.5rem; /* 24px */
+font-weight: bold;
+}
+
+.right-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem; /* 16px */
+}
+
+.small-image-div{
+    position: relative;
+    border-radius: 0.5rem; /* 8px */
+    overflow: hidden;
+}
+.small-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.small-div-text{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+    color: white;
+    padding: 0.5rem; /* 8px */
+}
+
+.small-text{
+    font-size: 1.125rem; /* 18px */
+font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    .destinations-holder{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+  }
+
+
+/* .titleHolder{
+    display: flex;
+    justify-content: center;
+}
+
+.titleHolder span{
+    font-size: 2rem;
+    margin:10px;
+    font-weight:500;
+}
+
+.titleHolder span:nth-child(1){
+
+}
+
+.titleHolder span:nth-child(2){
+    color: #FECD10;
+}
+
+.items-holder{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+.items-holder > div{
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 250px;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+} */

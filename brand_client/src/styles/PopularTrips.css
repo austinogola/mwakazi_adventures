@@ -1,0 +1,144 @@
+.popular-trips{
+  margin-bottom: 100px;
+}
+.popular-trips a{
+  color:black;
+}
+.titleHolder {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    margin-bottom: 20px;
+  }
+
+  .button_holder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .button_holder button{
+    border:none;
+    outline: none;
+    border:#F5A317 1px solid ;
+    color: #F5A317;
+    border-radius: 5px;
+    background-color: white;
+    transition: all .3s ease-in-out ;
+    padding: 10px;
+    font-weight: 500;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .button_holder button:hover{
+    cursor: pointer;
+    background-color: #F5A317;
+    color: white;
+  }
+  
+  .titleHolder span {
+    font-size: 2rem;
+    margin: 10px;
+    font-weight: 600;
+  }
+  
+  .titleHolder span:nth-child(2) {
+    color: #F5A317;
+  }
+  
+  .items-holder {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  
+  .itemHolder {
+    margin: 10px;
+    width:300px;
+    min-width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .itemHolder:hover {
+    transform: translateY(-5px);
+  }
+  
+  .imageHolder {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+/*    border:1px solid red;*/
+  }
+  
+  .imageHolder img {
+    width: 100%;
+    height: 200px;
+/*    height: 100%;*/
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .itemHolder:hover .imageHolder img {
+    transform: scale(1.1);
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+  
+  .overlay.show {
+    opacity: 1;
+  }
+  
+  .bookNowButton {
+    background-color: #F5A317;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .bookNowButton:hover {
+    background-color: #d68c0f;
+    transform: scale(1.05);
+  }
+  
+  .itemText {
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .categoryText {
+    color: #8D8E97;
+    margin-bottom: 5px;
+  }
+  
+  .itemText h4 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+  }
+  
+  .text-yellow-400 {
+    color: #F5A317;
+  }
+  
+  .text-gray-300 {
+    color: #D1D5DB;
+  }
