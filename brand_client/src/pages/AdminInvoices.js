@@ -77,7 +77,7 @@ const AdminInvoices = () => {
 
   return (
     <div className="adminInvoices_parentDiv">
-      <SideMenu activeLink="destinations" admin={true} />
+      <SideMenu activeLink="invoices" admin={true} />
       <div className="InvoicesParentDiv">
         <div className="adminInvoices-container">
           <h2>Create New Invoice</h2>
