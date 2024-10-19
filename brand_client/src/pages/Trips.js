@@ -8,8 +8,7 @@ import NewHeader from "../components/NewHeader"
 
 // Styled components (unchanged)
 
-const Trips = () => {
-  const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -76,7 +75,7 @@ const LoadingScreen = styled.div`
   color: #333;
 `;
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
   const [tripItems, setTripItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
