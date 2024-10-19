@@ -7,7 +7,9 @@ import Header from '../components/Header';
 import NewHeader from "../components/NewHeader"
 
 // Styled components (unchanged)
-const Container = styled.div`
+
+const Trips = () => {
+  const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -74,7 +76,6 @@ const LoadingScreen = styled.div`
   color: #333;
 `;
 
-const Trips = () => {
   const navigate = useNavigate();
   const [tripItems, setTripItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,25 +85,26 @@ const Trips = () => {
 
   const serverUrl=process.env.REACT_APP_SERVER_URL
 
-  const fetchTrips = useCallback(async () => {
-    try {
-      const res = await fetch(`${serverUrl}/api/v1/trips?size=10`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const response = await res.json();
-      console.log(response)
-      setTripItems(response.trips);
-    } catch (error) {
-      console.error('Error fetching trips:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  
 
   useEffect(() => {
+    const fetchTrips = (async () => {
+      try {
+        const res = await fetch(`${serverUrl}/api/v1/trips?size=10`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const response = await res.json();
+        console.log(response)
+        setTripItems(response.trips);
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    });
     fetchTrips();
-  }, [fetchTrips]);
+  }, []);
 
   const gotToDetails = (item) => {
     navigate(`/trip-view?id=${item._id}`);
@@ -160,11 +162,6 @@ const Trips = () => {
 }
 
 // Example usage:
-const formattedDate = formatDate("2024-10-15T00:00:00.000Z");
-console.log(formattedDate); // Output: "15 Oct 2024"
-
-const formattedDateRange = formatDate("2024-10-15T00:00:00.000Z", {period: "days", number: 2});
-console.log(formattedDateRange); // Output: "15 Oct 2024 - 17 Oct 2024"
 
 
   if (isLoading) {
