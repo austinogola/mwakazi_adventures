@@ -84,6 +84,7 @@ router.post("/init", async (req, res) => {
       guests,
       startDate,
       endDate,
+      paymentAmount,
     } = req.body;
     let newBooking;
     if (trip) {
@@ -95,10 +96,10 @@ router.post("/init", async (req, res) => {
           type: "trip",
           title: `${theTrip.title} for ${guests}`,
           guests,
-          total_price: theTrip.price * guests,
+          total_price: paymentAmount,
         },
         customer,
-        amount: theTrip.price * guests,
+        amount: paymentAmount,
         currency: "USD",
         created_at: new Date().getTime(),
         isPaid,
@@ -112,13 +113,13 @@ router.post("/init", async (req, res) => {
           type: "accommodation",
           title: `Accommodation at ${theAccommodation.location} for ${days} days`,
           days,
-          total_price: theAccommodation.dailyRate * days,
+          total_price: paymentAmount,
           startDate,
           endDate,
         },
 
         isPaid,
-        amount: theAccommodation.dailyRate * days,
+        amount: paymentAmount,
         currency: "USD",
         created_at: new Date().getTime(),
         customer,
@@ -136,14 +137,12 @@ router.post("/init", async (req, res) => {
       newBooking["orderId"] = pesaPalFdBack.order_tracking_id;
       await newBooking.save();
       console.log(newBooking);
-      res
-        .status(200)
-        .json({
-          message: "Booking made",
-          status: "success",
-          newBooking,
-          payment_obj: pesaPalFdBack,
-        });
+      res.status(200).json({
+        message: "Booking made",
+        status: "success",
+        newBooking,
+        payment_obj: pesaPalFdBack,
+      });
     } else {
       res
         .status(500)
