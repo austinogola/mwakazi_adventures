@@ -69,6 +69,23 @@ const mongoose = require("mongoose");
 router.get("/", async (req, res) => {
   try {
     const tripsArr = await NewTrip.find();
+    for (const trip of tripsArr) {
+      const theDest = await Destination.findById(trip.destination);
+    }
+    res.status(200).json({ status: "success", trips: tripsArr });
+  } catch (error) {
+    console.error("Error fetching trips:", error);
+    res.status(500).json({ message: "Error fetching trips" });
+  }
+});
+
+router.get("/tripsFilter", async (req, res) => {
+  try {
+    const tripsArr = await NewTrip.find().populate(
+      "destination",
+      "locale country continent"
+    );
+
     res.status(200).json({ status: "success", trips: tripsArr });
   } catch (error) {
     console.error("Error fetching trips:", error);
