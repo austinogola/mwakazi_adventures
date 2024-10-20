@@ -1,102 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link, useSearchParams } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import React, { useState, useEffect } from "react";
+import {
+  useNavigate,
+  useLocation,
+  Link,
+  useSearchParams,
+} from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const PaymentInfo = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    startDate: '',
-    endDate: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    startDate: "",
+    endDate: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [itemDetails, setItemDetails] = useState({});
   const [loggedIn, setLoggedIn] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const [bookingType, setBookingType] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [redirectUrl, setRedirectUrl] = useState('');
-  const [detailsSet, setDetailsSet] = useState(false); 
-  const [Days, setDays] = useState(1); 
-  const [Guests, setGuests] = useState(1); 
+  const [redirectUrl, setRedirectUrl] = useState("");
+  const [detailsSet, setDetailsSet] = useState(false);
+  const [Days, setDays] = useState(1);
+  const [Guests, setGuests] = useState(1);
 
   const [searchParams] = useSearchParams();
-  const _id = searchParams.get('id');
+  const _id = searchParams.get("id");
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
-  const [cookies] = useCookies(['ma_auth_token']);
+  const [cookies] = useCookies(["ma_auth_token"]);
   const ma_auth_token = cookies.ma_auth_token;
 
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-  
   useEffect(() => {
-    if (bookingType === 'accommodation' && itemDetails.days) {
+    if (bookingType === "accommodation" && itemDetails.days) {
       const startDate = new Date(today);
       const endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + parseInt(itemDetails.days, 10));
-      setFormData(prevState => ({
+      setFormData((prevState) => ({
         ...prevState,
-        endDate: endDate.toISOString().split('T')[0]
+        endDate: endDate.toISOString().split("T")[0],
       }));
     }
 
     if (location.state && location.state.itemDetails && !detailsSet) {
-      setDetailsSet(true)
-      console.log('Setting')
+      setDetailsSet(true);
+      console.log("Setting");
       setItemDetails(location.state.itemDetails);
-      setDays(location.state.itemDetails.days)
-      setGuests(location.state.itemDetails.guests)
+      setDays(location.state.itemDetails.days);
+      setGuests(location.state.itemDetails.guests);
       setBookingType(location.state.itemDetails.bookingType);
     }
   }, [bookingType, itemDetails, today, location.state]);
 
   const handleChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const { name, value } = e.target;
 
-    if(name==='startDate' || name==='endDate'){
-      const startDate=document.querySelector('#startDate')
-      const endDate=document.querySelector('#endDate')
-     
+    if (name === "startDate" || name === "endDate") {
+      const startDate = document.querySelector("#startDate");
+      const endDate = document.querySelector("#endDate");
+
       const start = new Date(startDate.value);
       const end = new Date(endDate.value);
 
-      const differenceInDays = ((end-start) / (1000 * 60 * 60 * 24))
-      console.log(differenceInDays)
-      if(differenceInDays<1){
-        console.log('Running here')
+      const differenceInDays = (end - start) / (1000 * 60 * 60 * 24);
+      console.log(differenceInDays);
+      if (differenceInDays < 1) {
+        console.log("Running here");
         end.setDate(start.getDate() + 1);
-        const adjustedEndDate = end.toISOString().split('T')[0];
-        endDate.value=adjustedEndDate
+        const adjustedEndDate = end.toISOString().split("T")[0];
+        endDate.value = adjustedEndDate;
 
-        return handleChange(e)
-      }else{
-        setDays(differenceInDays)
+        return handleChange(e);
+      } else {
+        setDays(differenceInDays);
       }
 
-      
-      
       // setItemDetails({...itemDetails,days:differenceInDays})
-
     }
 
-   
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
 
-    console.log(formData)
+    console.log(formData);
   };
 
   const handleAccept = () => {
-    window.open(redirectUrl, '_blank');
+    window.open(redirectUrl, "_blank");
     setShowPopup(false);
   };
 
@@ -107,35 +107,37 @@ const PaymentInfo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       const body = {
         isPaid: false,
         customer: formData,
-        days:Days,
-        guests:Guests
+        days: Days,
+        guests: Guests,
       };
 
       body[bookingType] = itemDetails._id;
+      body.paymentAmount = itemDetails.paymentAmount;
+      body.totalAmountPayable = itemDetails.totalAmount;
 
-      if(bookingType==='accommodation'){
-        body.startDate=formData.startDate
-        body.endDate=formData.endDate
+      if (bookingType === "accommodation") {
+        body.startDate = formData.startDate;
+        body.endDate = formData.endDate;
       }
 
       const response = await fetch(`${serverUrl}/api/v1/bookings/init`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${ma_auth_token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ma_auth_token}`,
         },
         body: JSON.stringify(body),
       });
 
       const res = await response.json();
 
-      if (res.status === 'fail') {
+      if (res.status === "fail") {
         setError(res.message);
         return;
       }
@@ -149,8 +151,8 @@ const PaymentInfo = () => {
       setRedirectUrl(payment_obj.redirect_url);
       setShowPopup(true);
     } catch (error) {
-      console.error('Error:', error);
-      setError('There was an error processing your request. Please try again.');
+      console.error("Error:", error);
+      setError("There was an error processing your request. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -162,22 +164,26 @@ const PaymentInfo = () => {
 
   return (
     <div className="container">
-      <span className='backArrow' onClick={goBack}>&#8592;</span><h2>Complete Your Booking</h2>
+      <span className="backArrow" onClick={goBack}>
+        &#8592;
+      </span>
+      <h2>Complete Your Booking</h2>
       <div>
         <div className="item-details">
           <h2>Item Details</h2>
           <p>
-            <strong style={{marginRight:'10px'}}>Item:</strong> 
-            {bookingType === 'trip' ? `${itemDetails.title} (X ${Guests})` : 
-            `Accommodation - ${itemDetails.location} (X ${Days} Days)`}
+            <strong style={{ marginRight: "10px" }}>Item:</strong>
+            {bookingType === "trip"
+              ? `${itemDetails.title} (X ${Guests})`
+              : `Accommodation - ${itemDetails.location} (X ${Days} Days)`}
           </p>
           <p>
-            <strong style={{marginRight:'10px'}}>Price:</strong> 
-            ${bookingType === 'trip' ?
-            itemDetails.price * parseInt(Guests, 10) :
-            itemDetails.dailyRate * parseInt(Days, 10)}
+            <strong style={{ marginRight: "10px" }}>Price:</strong>$
+            {bookingType === "trip"
+              ? itemDetails.paymentAmount
+              : itemDetails.dailyRate * parseInt(Days, 10)}
           </p>
-          {bookingType === 'accommodation' && (
+          {bookingType === "accommodation" && (
             <>
               <div className="form-group">
                 <label htmlFor="startDate">Start Date:</label>
@@ -197,7 +203,7 @@ const PaymentInfo = () => {
                   type="date"
                   id="endDate"
                   name="endDate"
-                  value={formData.endDate || ''}
+                  value={formData.endDate || ""}
                   onChange={handleChange}
                   min={formData.startDate || today}
                   required
@@ -255,14 +261,17 @@ const PaymentInfo = () => {
           />
         </div>
         <button type="submit" disabled={isLoading || !loggedIn}>
-          {isLoading ? 'Submitting...' : 'Submit and Pay'}
+          {isLoading ? "Submitting..." : "Submit and Pay"}
         </button>
       </form>
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
             <h2>Redirect to Payment</h2>
-            <p>You are about to be redirected to complete your purchase. Do you want to continue?</p>
+            <p>
+              You are about to be redirected to complete your purchase. Do you
+              want to continue?
+            </p>
             <div className="popup-buttons">
               <button onClick={handleCancel}>Cancel</button>
               <button onClick={handleAccept}>Accept</button>
@@ -273,7 +282,9 @@ const PaymentInfo = () => {
       {!loggedIn && (
         <div style={{ textAlign: "center", color: "red" }}>
           <p>You need to be signed in to proceed.</p>
-          <Link to="/login" style={{ color: "blue", fontWeight: 500 }}>Sign in now</Link>
+          <Link to="/login" style={{ color: "blue", fontWeight: 500 }}>
+            Sign in now
+          </Link>
         </div>
       )}
       <style jsx>{`
@@ -311,7 +322,8 @@ const PaymentInfo = () => {
           margin-bottom: 5px;
           font-weight: bold;
         }
-        input, textarea {
+        input,
+        textarea {
           width: 100%;
           padding: 8px;
           border: 1px solid #ddd;
@@ -376,7 +388,7 @@ const PaymentInfo = () => {
           color: white;
         }
         .popup button:last-child {
-          background-color: #4CAF50;
+          background-color: #4caf50;
           color: white;
           margin-left: 20px;
         }

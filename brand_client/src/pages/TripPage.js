@@ -110,9 +110,13 @@ const TripPage = ({ tripId }) => {
           <div className="info-item">
             <span className="icon">📍</span>
             <span>
-              {destinationData.country ||
-                destinationData.locale ||
-                destinationData.continent}
+              {destinationData.locale && destinationData.country
+                ? `${destinationData.locale}, ${destinationData.country}`
+                : destinationData.country
+                ? `${destinationData.country}, ${destinationData.continent}`
+                : destinationData.locale
+                ? `${destinationData.locale}, ${destinationData.continent}`
+                : destinationData.continent}
             </span>
           </div>
           <div className="info-item">
