@@ -37,25 +37,21 @@ const BookingPage = () => {
       try {
         let response, data;
 
-        // Attempt to fetch trip details
         response = await axios.get(`${serverUrl}/api/v1/trips/${_id}`, {
           headers: { "Content-Type": "application/json" },
         });
         data = response.data;
 
-        // Check if trip details exist
         if (data.trip && data.trip._id) {
-          setBookingType(data.trip.duration ? "trip" : "accommodation");
+          setBookingType("trip");
           setDetails(data.trip);
-          return; // Exit if trip details are found
+          return;
         }
       } catch (error) {
         console.warn("Error fetching trip details:", error.message);
-        // Continue to fetch accommodation details if trip fetching fails
       }
 
       try {
-        // Fetch accommodation details if trip fetch fails or no trip found
         const accommodationResponse = await axios.get(
           `${serverUrl}/api/v1/accommodations/${_id}`,
           {
@@ -64,7 +60,6 @@ const BookingPage = () => {
         );
         const accommodationData = accommodationResponse.data;
 
-        // Check if accommodation details exist
         if (accommodationData && accommodationData._id) {
           setBookingType("accommodation");
           setDetails(accommodationData);
@@ -215,7 +210,6 @@ const BookingPage = () => {
               </span>
             </span>
 
-            {/* Updated Deposit Percentage Dropdown */}
             <div className="form-group">
               <label htmlFor="depositPercentage">
                 Select amount percentage to be paid

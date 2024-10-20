@@ -181,7 +181,7 @@ const PaymentInfo = () => {
             <strong style={{ marginRight: "10px" }}>Price:</strong>$
             {bookingType === "trip"
               ? itemDetails.paymentAmount
-              : itemDetails.dailyRate * parseInt(Days, 10)}
+              : itemDetails.paymentAmount}
           </p>
           {bookingType === "accommodation" && (
             <>
