@@ -20,6 +20,8 @@ import AdminDests from "./pages/AdminDests";
 import EditTrip from "./pages/EditTrip";
 import EditDestination from "./pages/editDestination";
 import AdminInvoices from "./pages/AdminInvoices";
+import AdminCreateVoucher from "./pages/AdminVoucherCreate";
+import AdminCreateReceipt from "./pages/AdminCreateReceipt";
 // import HomePage from './pages/HomePage';
 function App() {
   return (
@@ -41,10 +43,12 @@ function App() {
         <Route path="/trip-view" element={<TripPage />} />
         <Route path="/admin/activities" element={<AdminActivities />} />
         <Route path="/admin/trips" element={<AdminTrips />} />
-        <Route path="admin/destinations" element={<AdminDests />} />
-        <Route path="admin/edit-trip" element={<EditTrip />} />
-        <Route path="admin/edit-destination" element={<EditDestination />} />
+        <Route path="/admin/destinations" element={<AdminDests />} />
+        <Route path="/admin/edit-trip" element={<EditTrip />} />
+        <Route path="/admin/edit-destination" element={<EditDestination />} />
         <Route path="admin/invoices" element={<AdminInvoices />} />
+        <Route path="/admin/vouchers" element={<AdminCreateVoucher />} />
+        <Route path="/admin/receipts" element={<AdminCreateReceipt />} />
         {/* <Route path="/destinations" element={<Destinations />} />
         <Route path="/trips" element={<Trips />} />
         <Route path="/contact" element={<Contact />} />

@@ -1,0 +1,192 @@
+/* Main container for the receipt creation form */
+.adminReceipt-parentDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.admin-receipt-container {
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin-left: 20px;
+}
+
+/* Styling for headings */
+.admin-receipt-container h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+/* Labels for the form fields */
+.admin-receipt-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Form inputs and textarea styling */
+.admin-receipt-form input,
+.admin-receipt-form textarea,
+.admin-receipt-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.admin-receipt-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Button for adding items */
+button {
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for each item purchased section */
+.receipt-item {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.receipt-item label {
+  width: 100%;
+  font-size: 14px;
+  color: #666;
+}
+
+.receipt-item input {
+  width: calc(33% - 10px);
+  margin-right: 10px;
+}
+
+/* Message display for success or errors */
+.receipt-message {
+  color: green;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+/* Submit button styling */
+.receipt-submit-btn {
+  width: 100%;
+  background-color: #28a745;
+  color: #fff;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.receipt-submit-btn:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .receipt-item input {
+    width: 100%;
+  }
+
+  .admin-receipt-container {
+    padding: 20px;
+    margin-left: 0;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .adminReceipt-parentDiv {
+    flex-direction: column;
+  }
+}
+
+.receipts__container {
+  max-width: 1200px;
+  margin: 20px auto;
+  width: 90%;
+  overflow-y: scroll;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.receipts__title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.receipts__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.receipts__thead {
+  background-color: #4a90e2;
+  color: #fff;
+}
+
+.receipts__th,
+.receipts__td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.receipts__tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.receipts__row:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+.receipts__error {
+  color: red;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.receipts__loading {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #666;
+}

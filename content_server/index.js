@@ -9,6 +9,8 @@ const authRoutes = require("./routes/auth");
 const bookingRoutes = require("./routes/bookings");
 const activitiesRoutes = require("./routes/activities");
 const accommodationsRoutes = require("./routes/accommodations");
+const voucherRoutes = require("./routes/voucher");
+const receiptsRoutes = require("./routes/receipt");
 
 const dotenv = require("dotenv");
 
@@ -47,6 +49,8 @@ app.use("/api/v1/bookings", bookingRoutes);
 app.use("/api/v1/invoices", invoiceRoutes);
 app.use("/api/v1/activities", activitiesRoutes);
 app.use("/api/v1/accommodations", accommodationsRoutes);
+app.use("/api/v1/vouchers", voucherRoutes);
+app.use("/api/v1/receipts", receiptsRoutes);
 app.use("/auth", authRoutes);
 
 // Connect to MongoDB

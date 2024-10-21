@@ -122,7 +122,7 @@ const PopularTrips = () => {
             <div className="itemText">
               <p className="categoryText">Category: {item.categories[0]}</p>
               <h4>
-                <Link to="/trips">{item.title}</Link>
+                <Link to={`/trip-view?id=${item._id}`}>{item.title}</Link>
               </h4>
               <p>{item.price} USD</p>
               <p>

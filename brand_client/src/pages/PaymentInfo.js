@@ -5,6 +5,7 @@ import {
   Link,
   useSearchParams,
 } from "react-router-dom";
+import axios from "axios";
 import { useCookies } from "react-cookie";
 
 const PaymentInfo = () => {
@@ -13,86 +14,78 @@ const PaymentInfo = () => {
     lastName: "",
     email: "",
     phone: "",
-    startDate: "",
+    startDate: new Date().toISOString().split("T")[0],
     endDate: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [itemDetails, setItemDetails] = useState({});
   const [loggedIn, setLoggedIn] = useState(true);
-  const navigate = useNavigate();
-  const location = useLocation();
   const [bookingType, setBookingType] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState("");
-  const [detailsSet, setDetailsSet] = useState(false);
-  const [Days, setDays] = useState(1);
-  const [Guests, setGuests] = useState(1);
+  const [days, setDays] = useState(1);
+  const [guests, setGuests] = useState(1);
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const _id = searchParams.get("id");
 
   const today = new Date().toISOString().split("T")[0];
-
   const [cookies] = useCookies(["ma_auth_token"]);
   const ma_auth_token = cookies.ma_auth_token;
 
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
-    if (bookingType === "accommodation" && itemDetails.days) {
-      const startDate = new Date(today);
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + parseInt(itemDetails.days, 10));
-      setFormData((prevState) => ({
-        ...prevState,
-        endDate: endDate.toISOString().split("T")[0],
-      }));
-    }
+    if (location.state && location.state.itemDetails) {
+      const details = location.state.itemDetails;
+      setItemDetails(details);
+      setDays(details.days || 1);
+      setGuests(details.guests || 1);
+      setBookingType(details.bookingType);
 
-    if (location.state && location.state.itemDetails && !detailsSet) {
-      setDetailsSet(true);
-      console.log("Setting");
-      setItemDetails(location.state.itemDetails);
-      setDays(location.state.itemDetails.days);
-      setGuests(location.state.itemDetails.guests);
-      setBookingType(location.state.itemDetails.bookingType);
+      if (details.bookingType === "accommodation") {
+        const startDate = new Date(today);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + parseInt(details.days, 10));
+        setFormData((prevState) => ({
+          ...prevState,
+          endDate: endDate.toISOString().split("T")[0],
+        }));
+      }
     }
-  }, [bookingType, itemDetails, today, location.state]);
+  }, [location.state, today]);
 
   const handleChange = (e) => {
-    e.preventDefault();
     const { name, value } = e.target;
 
     if (name === "startDate" || name === "endDate") {
-      const startDate = document.querySelector("#startDate");
-      const endDate = document.querySelector("#endDate");
+      const start = new Date(formData.startDate);
+      const end = new Date(value);
 
-      const start = new Date(startDate.value);
-      const end = new Date(endDate.value);
-
-      const differenceInDays = (end - start) / (1000 * 60 * 60 * 24);
-      console.log(differenceInDays);
-      if (differenceInDays < 1) {
-        console.log("Running here");
-        end.setDate(start.getDate() + 1);
-        const adjustedEndDate = end.toISOString().split("T")[0];
-        endDate.value = adjustedEndDate;
-
-        return handleChange(e);
+      if (end <= start) {
+        const adjustedEnd = new Date(start);
+        adjustedEnd.setDate(start.getDate() + 1);
+        setFormData((prevState) => ({
+          ...prevState,
+          endDate: adjustedEnd.toISOString().split("T")[0],
+        }));
       } else {
-        setDays(differenceInDays);
+        const daysDifference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        setDays(daysDifference);
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
       }
-
-      // setItemDetails({...itemDetails,days:differenceInDays})
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
     }
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-
-    console.log(formData);
   };
 
   const handleAccept = () => {
@@ -111,110 +104,88 @@ const PaymentInfo = () => {
 
     try {
       const body = {
+        itemDetails,
         isPaid: false,
         customer: formData,
-        days: Days,
-        guests: Guests,
       };
 
-      body[bookingType] = itemDetails._id;
-      body.paymentAmount = itemDetails.paymentAmount;
-      body.totalAmountPayable = itemDetails.totalAmount;
+      const { data } = await axios.post(
+        `${serverUrl}/api/v1/bookings/init`,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${ma_auth_token}`,
+          },
+        }
+      );
 
-      if (bookingType === "accommodation") {
-        body.startDate = formData.startDate;
-        body.endDate = formData.endDate;
+      console.log("Response data:", data);
+
+      if (data.status === "fail") {
+        setError(data.message);
+      } else {
+        setRedirectUrl(data.payment_obj.redirect_url);
+        setShowPopup(true);
       }
-
-      const response = await fetch(`${serverUrl}/api/v1/bookings/init`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ma_auth_token}`,
-        },
-        body: JSON.stringify(body),
-      });
-
-      const res = await response.json();
-
-      if (res.status === "fail") {
-        setError(res.message);
-        return;
-      }
-
-      const { payment_obj } = res;
-      if (payment_obj.error) {
-        setError(payment_obj.error.message);
-        return;
-      }
-
-      setRedirectUrl(payment_obj.redirect_url);
-      setShowPopup(true);
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
       setError("There was an error processing your request. Please try again.");
+      console.error("Error:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const goBack = () => {
-    navigate(-1);
-  };
-
   return (
     <div className="container">
-      <span className="backArrow" onClick={goBack}>
+      <span className="backArrow" onClick={() => navigate(-1)}>
         &#8592;
       </span>
       <h2>Complete Your Booking</h2>
-      <div>
-        <div className="item-details">
-          <h2>Item Details</h2>
-          <p>
-            <strong style={{ marginRight: "10px" }}>Item:</strong>
-            {bookingType === "trip"
-              ? `${itemDetails.title} (X ${Guests})`
-              : `Accommodation - ${itemDetails.location} (X ${Days} Days)`}
-          </p>
-          <p>
-            <strong style={{ marginRight: "10px" }}>Price:</strong>$
-            {bookingType === "trip"
-              ? itemDetails.paymentAmount
-              : itemDetails.paymentAmount}
-          </p>
-          {bookingType === "accommodation" && (
-            <>
-              <div className="form-group">
-                <label htmlFor="startDate">Start Date:</label>
-                <input
-                  type="date"
-                  id="startDate"
-                  name="startDate"
-                  value={formData.startDate || today}
-                  onChange={handleChange}
-                  min={today}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="endDate">End Date:</label>
-                <input
-                  type="date"
-                  id="endDate"
-                  name="endDate"
-                  value={formData.endDate || ""}
-                  onChange={handleChange}
-                  min={formData.startDate || today}
-                  required
-                />
-              </div>
-            </>
-          )}
-        </div>
+
+      <div className="item-details">
+        <h2>Item Details</h2>
+        <p>
+          <strong>Item:</strong>
+          {bookingType === "trip"
+            ? `${itemDetails.title} (X ${guests})`
+            : `Accommodation - ${itemDetails.location} (X ${days} Days)`}
+        </p>
+        <p>
+          <strong>Price:</strong> ${itemDetails.paymentAmount}
+        </p>
+        {bookingType === "accommodation" && (
+          <>
+            <div className="form-group">
+              <label htmlFor="startDate">Start Date:</label>
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                min={today}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="endDate">End Date:</label>
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                min={formData.startDate || today}
+                required
+              />
+            </div>
+          </>
+        )}
       </div>
+
       <h2>Traveller Details</h2>
       {error && <div className="error">{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="firstName">First Name:</label>
@@ -264,6 +235,7 @@ const PaymentInfo = () => {
           {isLoading ? "Submitting..." : "Submit and Pay"}
         </button>
       </form>
+
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup">
@@ -279,6 +251,7 @@ const PaymentInfo = () => {
           </div>
         </div>
       )}
+
       {!loggedIn && (
         <div style={{ textAlign: "center", color: "red" }}>
           <p>You need to be signed in to proceed.</p>
@@ -287,6 +260,7 @@ const PaymentInfo = () => {
           </Link>
         </div>
       )}
+
       <style jsx>{`
         .backArrow {
           font-size: 2.5rem;
@@ -298,10 +272,6 @@ const PaymentInfo = () => {
           margin: 0 auto;
           padding: 20px;
           font-family: Arial, sans-serif;
-        }
-        h1 {
-          text-align: center;
-          color: #333;
         }
         .error {
           background-color: #ffebee;
@@ -318,84 +288,51 @@ const PaymentInfo = () => {
           margin-bottom: 15px;
         }
         label {
-          display: block;
-          margin-bottom: 5px;
           font-weight: bold;
+          margin-bottom: 5px;
         }
-        input,
-        textarea {
-          width: 100%;
+        input {
           padding: 8px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
           font-size: 16px;
-        }
-        textarea {
-          height: 100px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          width: 100%;
         }
         button {
-          background-color: #007bff;
-          color: white;
-          border: none;
           padding: 10px 15px;
-          font-size: 16px;
+          font-size: 18px;
+          color: white;
+          background-color: #28a745;
+          border: none;
           border-radius: 4px;
           cursor: pointer;
-        }
-        button:hover {
-          background-color: #0056b3;
-        }
-        button:disabled {
-          background-color: #cccccc;
-          cursor: not-allowed;
         }
         .popup-overlay {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: rgba(0, 0, 0, 0.5);
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
           display: flex;
           justify-content: center;
           align-items: center;
-          z-index: 1000;
         }
         .popup {
-          background-color: white;
+          background: white;
           padding: 20px;
-          border-radius: 5px;
-          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-          width: 90%;
-          max-width: 400px;
-        }
-        .popup h2 {
-          margin-top: 0;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          text-align: center;
         }
         .popup-buttons {
-          display: flex;
-          justify-content: space-between;
           margin-top: 20px;
+          display: flex;
+          justify-content: space-around;
         }
-        .popup button {
+        .popup-buttons button {
           padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-        .popup button:first-child {
-          background-color: #f44336;
-          color: white;
-        }
-        .popup button:last-child {
-          background-color: #4caf50;
-          color: white;
-          margin-left: 20px;
-        }
-        @media (max-width: 480px) {
-          .container {
-            padding: 10px;
-          }
+          font-size: 16px;
         }
       `}</style>
     </div>

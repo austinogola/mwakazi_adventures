@@ -15,7 +15,7 @@ const BookingPage = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [details, setDetails] = useState(null);
   const [bookingType, setBookingType] = useState(null);
-  const [formData, setFormData] = useState({
+  const [formDataBooking, setFormDataBooking] = useState({
     name: "",
     email: "",
     date: "",
@@ -81,7 +81,7 @@ const BookingPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setFormDataBooking((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -90,9 +90,9 @@ const BookingPage = () => {
   const calculatePayment = () => {
     const total =
       (details.price || details.dailyRate) *
-      (formData.days || 1) *
-      (bookingType === "trip" ? formData.guests : 1);
-    const depositPercentage = parseInt(formData.depositPercentage);
+      (formDataBooking.days || 1) *
+      (bookingType === "trip" ? formDataBooking.guests : 1);
+    const depositPercentage = parseInt(formDataBooking.depositPercentage);
     const paymentAmount = (total * depositPercentage) / 100;
     return { paymentAmount, total };
   };
@@ -104,8 +104,9 @@ const BookingPage = () => {
     const bookingData = {
       itemDetails: {
         ...details,
-        guests: formData.guests,
-        days: formData.days || 1,
+        formDataBooking,
+        guests: formDataBooking.guests,
+        days: formDataBooking.days || 1,
         bookingType,
         paymentAmount,
         totalAmount: total,
@@ -163,7 +164,7 @@ const BookingPage = () => {
                   type="number"
                   id="days"
                   name="days"
-                  value={formData.days}
+                  value={formDataBooking.days}
                   min={1}
                   onChange={handleInputChange}
                   required
@@ -189,7 +190,7 @@ const BookingPage = () => {
                   type="number"
                   id="guests"
                   name="guests"
-                  value={formData.guests}
+                  value={formDataBooking.guests}
                   onChange={handleInputChange}
                   required
                   min={1}
@@ -204,8 +205,8 @@ const BookingPage = () => {
               </span>
               <span>
                 {(details.price || details.dailyRate) *
-                  (formData.days || 1) *
-                  (bookingType === "trip" ? formData.guests : 1)}{" "}
+                  (formDataBooking.days || 1) *
+                  (bookingType === "trip" ? formDataBooking.guests : 1)}{" "}
                 USD
               </span>
             </span>
@@ -217,7 +218,7 @@ const BookingPage = () => {
               <select
                 id="depositPercentage"
                 name="depositPercentage"
-                value={formData.depositPercentage}
+                value={formDataBooking.depositPercentage}
                 onChange={handleInputChange}
                 required
               >
@@ -238,7 +239,7 @@ const BookingPage = () => {
               <select
                 id="payment"
                 name="payment"
-                value={formData.payment}
+                value={formDataBooking.payment}
                 onChange={handleInputChange}
                 required
               >
