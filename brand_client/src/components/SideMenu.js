@@ -71,7 +71,7 @@ function SideMenu({ activeLink, admin }) {
               </NavLink>
             </li>
           ) : null} */}
-          {admin ? (
+          {/* {admin ? (
             <li>
               <NavLink
                 to="/admin/destinations"
@@ -81,7 +81,7 @@ function SideMenu({ activeLink, admin }) {
                 Destinations
               </NavLink>
             </li>
-          ) : null}
+          ) : null} */}
           {admin ? (
             <li>
               <NavLink
@@ -148,7 +148,7 @@ function SideMenu({ activeLink, admin }) {
               </NavLink>
             </li>
           ) : null} */}
-          <li>
+          {/* <li>
             <NavLink
               exact
               to="/my-bookings"
@@ -157,7 +157,7 @@ function SideMenu({ activeLink, admin }) {
             >
               My Bookings
             </NavLink>
-          </li>
+          </li> */}
           <li className="logoutBtn" onClick={logout}>
             Logout
           </li>

@@ -1,110 +1,220 @@
-.adminInvoices_parentDiv {
+.createInvoice-parentDiv {
   display: flex;
   gap: 2rem;
 }
 
-.adminInvoices-container {
+.invoice-form-container {
+  max-width: 650px;
+  padding: 30px;
   width: 75%;
-  margin: 1rem auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.adminInvoices-container h2 {
+.invoice-form-container:hover {
+  transform: translateY(-5px);
+}
+
+.invoice-form-title {
   text-align: center;
-  color: #333;
+  color: #2c3e50;
+  font-size: 24px;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.invoice-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-form-group {
+  display: flex;
+  gap: 1rem;
   margin-bottom: 20px;
 }
 
-.adminInvoices-form-group {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 15px;
+.invoice-form-label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #34495e;
+  width: 8rem;
 }
 
-.adminInvoices-form-group label {
-  display: block;
-  font-weight: bold;
-  color: #333;
-  width: 20rem;
-}
-
-.adminInvoices-form-group span {
-  color: red;
-}
-
-.adminInvoices-form-group input,
-.adminInvoices-form-group select,
-.adminInvoices-form-group textarea {
+.invoice-form-input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.adminInvoices-form-group textarea {
-  resize: vertical;
-  height: 100px;
-}
-
-.adminInvoices-amount {
-  display: flex;
-  align-items: center;
-}
-
-.adminInvoices-amount select {
-  width: 80px;
-  margin-right: 10px;
-}
-
-.adminInvoices-due-date {
-  display: flex;
-  align-items: center;
-}
-
-.adminInvoices-due-date span {
-  margin: 0 10px;
-}
-
-.adminInvoices-generate-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+  padding: 10px 12px;
   font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #bdc3c7;
+  background-color: #f7f9fa;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.invoice-form-input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+.invoice-form-input select {
+  appearance: none;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.invoice-form-input select:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+
+.invoice-form-button {
+  padding: 12px 20px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.adminInvoices-generate-btn:hover {
-  background-color: #0056b3;
+.invoice-form-button:hover {
+  background-color: #43a047;
+  box-shadow: 0 8px 15px rgba(67, 160, 71, 0.3);
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 500;
-  background-color: #333;
+.invoice-form-input:hover {
+  border-color: #95a5a6;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@media (max-width: 768px) {
+  .invoice-form-container {
+    padding: 20px;
+  }
+
+  .invoice-form-button {
+    width: 100%;
+    padding: 15px;
   }
 }
 
-.error-message {
-  color: red;
+/* InvoicesList.css */
+
+.invoices-list-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  font-family: "Arial", sans-serif;
 }
 
-.success-message {
-  color: green;
+.invoices-title {
+  text-align: center;
+  font-size: 28px;
+  color: #343a40;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.invoices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.invoice-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.invoice-card:hover {
+  transform: translateY(-10px);
+}
+
+.invoice-recipient {
+  font-size: 20px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.invoice-email {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.invoice-total {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.toggle-installments-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.toggle-installments-button:hover {
+  background-color: #0056b3;
+}
+
+.installments-section.hidden {
+  display: none;
+}
+
+.installments-section {
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.installments-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.installments-list {
+  list-style: none;
+  padding: 0;
+}
+
+.installment-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.loading-message {
+  text-align: center;
+  font-size: 20px;
+  color: #007bff;
+}
+
+.error-message {
+  text-align: center;
+  font-size: 20px;
+  color: #dc3545;
 }
