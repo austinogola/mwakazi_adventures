@@ -48,6 +48,9 @@ const InvoicesList = () => {
             <p className="invoice-total">
               Total: <strong>${invoice.totalAmount.toFixed(2)}</strong>
             </p>
+            <p className="invoice-total">
+              Balance: <strong>${invoice.balance.toFixed(2)}</strong>
+            </p>
             <button
               className="toggle-installments-button"
               onClick={() =>
@@ -65,9 +68,18 @@ const InvoicesList = () => {
               <ul className="installments-list">
                 {invoice.installment.map((inst, index) => (
                   <li key={index} className="installment-item">
-                    <span>Payment method: {inst.paymentMethod}</span>
-                    <span>{inst.percentage}% paid</span>
-                    <span>${inst.payableAmount.toFixed(2)}</span>
+                    <span>Payment Method: {inst.paymentMethod}</span>
+                    <span>Payment percentage: {inst.percentage}% </span>
+                    <span>
+                      Payable Amount: ${inst.payableAmount.toFixed(2)}
+                    </span>
+                    <span className={inst.isPaid ? "paid" : "unpaid"}>
+                      Status: {inst.isPaid ? "Paid" : "Unpaid"}
+                    </span>
+                    <span>
+                      Date Created:{" "}
+                      {new Date(inst.createdAt).toLocaleDateString()}
+                    </span>
                   </li>
                 ))}
               </ul>

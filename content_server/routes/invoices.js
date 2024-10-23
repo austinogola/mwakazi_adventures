@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Invoice = require("../models/Invoices");
-const { body, validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 
 router.post("/create-invoice", async (req, res) => {
@@ -27,15 +26,28 @@ router.post("/create-invoice", async (req, res) => {
   try {
     const existingInvoice = await Invoice.findOne({
       recipientEmail,
+      title: bookingType === "trip" ? title : undefined,
+      destination: bookingType === "accommodation" ? destination : undefined,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
     });
 
     if (existingInvoice) {
+      const totalPaid = existingInvoice.installment
+        .filter((inst) => inst.isPaid)
+        .reduce((sum, inst) => sum + inst.payableAmount, 0);
+
+      if (totalPaid + payableAmount > totalAmount) {
+        return res.status(400).json({
+          message: "The incoming payable amount exceeds the total amount.",
+        });
+      }
+
       existingInvoice.installment.push({
         paymentMethod,
         percentage,
         payableAmount,
+        isPaid: false,
       });
 
       await existingInvoice.save();
@@ -54,6 +66,7 @@ router.post("/create-invoice", async (req, res) => {
             paymentMethod,
             percentage,
             payableAmount,
+            isPaid: false,
           },
         ],
         title,
@@ -114,12 +127,15 @@ router.post("/create-invoice", async (req, res) => {
     const installments = invoice.installment
       .map(
         (inst) => `
-      <tr>
-        <td>${inst.paymentMethod}</td>
-        <td>${inst.percentage}%</td>
-        <td>$${inst.payableAmount.toFixed(2)}</td>
-      </tr>
-    `
+        <tr>
+          <td>${inst.paymentMethod}</td>
+          <td>${inst.percentage}%</td>
+          <td>$${inst.payableAmount.toFixed(2)}</td>
+          <td style="color: ${inst.isPaid ? "green" : "red"};">
+            ${inst.isPaid ? "Paid" : "Not Paid"}
+          </td>
+        </tr>
+      `
       )
       .join("");
 
@@ -149,6 +165,7 @@ router.post("/create-invoice", async (req, res) => {
               <th style="padding: 8px; border: 1px solid #ddd;">Payment Method</th>
               <th style="padding: 8px; border: 1px solid #ddd;">Percentage</th>
               <th style="padding: 8px; border: 1px solid #ddd;">Amount</th>
+              <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -160,7 +177,7 @@ router.post("/create-invoice", async (req, res) => {
         )}</h4>
         <h4 style="color: #333;">Balance: $${balance.toFixed(2)}</h4>
         <p>If you have any questions, please feel free to contact us.</p>
-        <p>Best regards,<br>Your Company Name</p>
+        <p>Best regards,<br>Mwakazi Adventures</p>
       </div>
     `;
   }

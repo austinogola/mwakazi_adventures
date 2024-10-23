@@ -199,14 +199,6 @@
   list-style: none;
   padding: 0;
 }
-
-.installment-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #ccc;
-}
-
 .loading-message {
   text-align: center;
   font-size: 20px;
@@ -217,4 +209,31 @@
   text-align: center;
   font-size: 20px;
   color: #dc3545;
+}
+
+.installment-item {
+  list-style: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.installment-item span {
+  font-size: 14px;
+  color: #333;
+}
+
+.installment-item span.paid {
+  color: green;
+  font-weight: bold;
+}
+
+.installment-item span.unpaid {
+  color: red;
+  font-weight: bold;
 }

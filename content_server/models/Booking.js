@@ -53,8 +53,6 @@ const bookingSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String },
-    startDate: { type: Date },
-    endDate: { type: Date },
   },
   amount: { type: Number, required: true },
   currency: { type: String, default: "USD" },

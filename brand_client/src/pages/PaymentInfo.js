@@ -42,6 +42,7 @@ const PaymentInfo = () => {
     if (location.state && location.state.itemDetails) {
       const details = location.state.itemDetails;
       setItemDetails(details);
+      console.log(details);
       setDays(details.days || 1);
       setGuests(details.guests || 1);
       setBookingType(details.bookingType);
@@ -53,6 +54,12 @@ const PaymentInfo = () => {
         setFormData((prevState) => ({
           ...prevState,
           endDate: endDate.toISOString().split("T")[0],
+        }));
+      } else if (details.bookingType === "trip") {
+        setFormData((prevState) => ({
+          ...prevState,
+          startDate: details.startDate || today,
+          endDate: details.endDate || today,
         }));
       }
     }
@@ -181,9 +188,21 @@ const PaymentInfo = () => {
             </div>
           </>
         )}
+        {bookingType === "trip" && (
+          <>
+            <div className="form-group">
+              <label>Start Date:</label>
+              <p>{formData.startDate}</p>
+            </div>
+            <div className="form-group">
+              <label>End Date:</label>
+              <p>{formData.endDate}</p>
+            </div>
+          </>
+        )}
       </div>
 
-      <h2>Traveller Details</h2>
+      <h2>Details</h2>
       {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
@@ -255,8 +274,8 @@ const PaymentInfo = () => {
       {!loggedIn && (
         <div style={{ textAlign: "center", color: "red" }}>
           <p>You need to be signed in to proceed.</p>
-          <Link to="/login" style={{ color: "blue", fontWeight: 500 }}>
-            Sign in now
+          <Link to="/login" style={{ color: "blue", fontWeight: 700 }}>
+            Sign In Here
           </Link>
         </div>
       )}

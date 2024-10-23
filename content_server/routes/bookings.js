@@ -89,6 +89,8 @@ async function createTripBooking(itemDetails, customer, isPaid) {
       total_price: itemDetails.paymentAmount,
     },
     customer,
+    startDate: itemDetails.startDate,
+    endDate: itemDetails.endDate,
     amount: itemDetails.paymentAmount,
     currency: "USD",
     created_at: new Date().getTime(),
