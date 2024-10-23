@@ -82,6 +82,18 @@ function SideMenu({ activeLink, admin }) {
               </NavLink>
             </li>
           ) : null} */}
+
+          {admin ? (
+            <li>
+              <NavLink
+                to="/admin/accommodations"
+                activeClassName="active-link"
+                className={activeLink === "accommodations" ? "active-link" : ""}
+              >
+                Accommodations
+              </NavLink>
+            </li>
+          ) : null}
           {admin ? (
             <li>
               <NavLink

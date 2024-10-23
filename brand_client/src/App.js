@@ -22,6 +22,8 @@ import EditDestination from "./pages/editDestination";
 import AdminInvoices from "./pages/AdminInvoices";
 import AdminCreateVoucher from "./pages/AdminVoucherCreate";
 import AdminCreateReceipt from "./pages/AdminCreateReceipt";
+import AdminBookings from "./pages/AdminBookings";
+import AdminAccommodations from "./pages/AdminAccommodations";
 // import HomePage from './pages/HomePage';
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
         <Route path="admin/invoices" element={<AdminInvoices />} />
         <Route path="/admin/vouchers" element={<AdminCreateVoucher />} />
         <Route path="/admin/receipts" element={<AdminCreateReceipt />} />
+        <Route path="/admin/accommodations" element={<AdminAccommodations />} />
+        <Route path="/admin/bookings" element={<AdminBookings />} />
         {/* <Route path="/destinations" element={<Destinations />} />
         <Route path="/trips" element={<Trips />} />
         <Route path="/contact" element={<Contact />} />

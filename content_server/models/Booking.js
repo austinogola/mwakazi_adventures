@@ -1,36 +1,68 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
-  account: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Account', // Reference to the Account model
-    // required: true,
-  },
-  customer:{},
-  item_details:{},
   trip: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trip', // Reference to the Trip model
-    // required: true,
+    ref: "NewTrip",
+    required: function () {
+      return this.item_details.type === "trip";
+    },
   },
-  accomodation: {
+  accommodation: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Accomodation', // Reference to the Trip model
-    // required: true,
+    ref: "Accommodation",
+    required: function () {
+      return this.item_details.type === "accommodation";
+    },
   },
-  amount:{type:Number},
-  created_at:{type:Number},
-  paid_at:{type:Number},
-  payment_status:{type:String},
-  payment_method:{type:String},
-  orderId:{type:String},
-  isPaid: {
-    type: Boolean,
-    default: false,
+  item_details: {
+    type: {
+      type: String,
+      enum: ["trip", "accommodation"],
+      required: true,
+    },
+    title: { type: String, required: true },
+    guests: {
+      type: Number,
+      required: function () {
+        return this.type === "trip";
+      },
+    },
+    days: {
+      type: Number,
+      required: function () {
+        return this.type === "accommodation";
+      },
+    },
+    total_price: { type: Number, required: true },
+    startDate: {
+      type: Date,
+      required: function () {
+        return this.type === "accommodation";
+      },
+    },
+    endDate: {
+      type: Date,
+      required: function () {
+        return this.type === "accommodation";
+      },
+    },
   },
+  customer: {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String },
+    startDate: { type: Date },
+    endDate: { type: Date },
+  },
+  amount: { type: Number, required: true },
+  currency: { type: String, default: "USD" },
+  created_at: { type: Date, default: Date.now },
+  isPaid: { type: Boolean, default: false },
+  orderId: { type: String },
 });
 
-  
+const Booking = mongoose.model("Booking", bookingSchema);
 
-const Booking = mongoose.model('Booking', bookingSchema);
 module.exports = Booking;

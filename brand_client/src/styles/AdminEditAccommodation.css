@@ -1,0 +1,107 @@
+.accommodation-edit-form-wrapper {
+  position: absolute;
+  top: -5%;
+  left: 40%;
+  transform: translateX(-50%);
+  background-color: white;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+}
+
+.accommodation-form-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.accommodation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.accommodation-form-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.accommodation-form-negotiate-input {
+  width: fit-content;
+}
+
+.accommodation-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.accommodation-form-checkbox {
+  margin-right: 10px;
+}
+
+.accommodation-form-button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.accommodation-form-button:hover {
+  background-color: #45a049;
+}
+
+.add-amenity-button,
+.add-image-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-amenity-button:hover,
+.add-image-button:hover {
+  background-color: #0056b3;
+}
+
+.remove-amenity-button,
+.remove-image-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-amenity-button:hover,
+.remove-image-button:hover {
+  background-color: #c82333;
+}
+
+.image-input-wrapper,
+.amenity-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}

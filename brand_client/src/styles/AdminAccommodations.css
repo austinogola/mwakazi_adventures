@@ -1,0 +1,202 @@
+/* Parent container to align SideMenu and form */
+.accommodations-parentDiv {
+  display: flex;
+  background-color: #f4f4f9;
+  min-height: 100vh;
+  padding: 20px;
+  gap: 4rem;
+}
+
+.accommodation-form-wrapper {
+  max-width: 900px;
+  background-color: white;
+  padding: 30px;
+  margin-left: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 90%;
+}
+
+.accommodation-form-header {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.accommodation-form-label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #555;
+  display: block;
+}
+
+.accommodation-form-input {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.accommodation-form-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.accommodation-form-checkbox {
+  margin-right: 10px;
+  margin-top: 1rem;
+}
+
+.image-input-wrapper,
+.amenity-input-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.accommodation-form-input-small {
+  flex: 1;
+}
+
+.add-image-button,
+.add-amenity-button,
+.remove-image-button,
+.remove-amenity-button {
+  margin-left: 10px;
+  width: 10rem;
+  height: 2.5rem;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-image-button,
+.remove-amenity-button {
+  background-color: #dc3545;
+}
+
+.add-image-button:hover,
+.add-amenity-button:hover,
+.remove-image-button:hover,
+.remove-amenity-button:hover {
+  opacity: 0.9;
+}
+
+.accommodation-form-button {
+  display: block;
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.accommodation-form-button:hover {
+  background-color: #218838;
+}
+
+.accommodation-form {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .accommodations-parentDiv {
+    flex-direction: column;
+  }
+
+  .accommodation-form-wrapper {
+    margin-left: 0;
+  }
+
+  .image-input-wrapper,
+  .amenity-input-wrapper {
+    flex-direction: column;
+  }
+
+  .add-image-button,
+  .add-amenity-button,
+  .remove-image-button,
+  .remove-amenity-button {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+.message-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  color: #28a745;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.accommodation-manager {
+  width: 100%;
+}
+
+.top-menu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.menu-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-button.active {
+  background-color: #0056b3;
+}
+
+.menu-button:hover {
+  background-color: #0056b3;
+}
+
+.overLayDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(70, 70, 70, 0.767);
+  z-index: 500;
+}

@@ -1,0 +1,163 @@
+.accommodation-list {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.accommodation-form-header {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.accommodation-item {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.accommodation-item h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.accommodation-item p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+.accommodation-list > button {
+  display: inline-block;
+  padding: 10px 15px;
+  margin-top: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #2980b9;
+  color: #fff;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #1a5981;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.accommodation-list > p {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.accommodation-list > p.error {
+  color: #e74c3c;
+}
+
+.accommodation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  z-index: 9999; /* Ensures it appears above all other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.accommodation-edit-form-wrapper {
+  background-color: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10000;
+}
+
+.accommodation-edit-form-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.accommodation-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.accommodation-edit-form-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.accommodation-edit-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.accommodation-edit-form-checkbox {
+  margin-right: 10px;
+}
+
+.accommodation-edit-button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.accommodation-edit-button:hover {
+  background-color: #45a049;
+}
+
+.accommodation-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.accommodation-close-button:hover {
+  color: red;
+}

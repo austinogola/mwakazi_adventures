@@ -2,18 +2,16 @@ const express = require("express");
 const router = express.Router();
 const Accommodation = require("../models/Accommodation");
 
-// Create a new accommodation
-router.post("/", async (req, res) => {
+router.post("/create-accommodation", async (req, res) => {
   try {
-    const accommodation = new Accommodation(req.body);
-    await accommodation.save();
-    res.status(201).send(accommodation);
+    const newAccommodation = new Accommodation(req.body);
+    await newAccommodation.save();
+    res.status(201).json({ message: "Accommodation created successfully!" });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(500).json({ error: "Failed to create accommodation" });
   }
 });
 
-// Get all accommodations
 router.get("/", async (req, res) => {
   try {
     const accommodations = await Accommodation.find({});
@@ -23,7 +21,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a specific accommodation by ID
 router.get("/:id", async (req, res) => {
   console.log("Route reached for accommodation ID:", req.params.id);
   try {
@@ -43,7 +40,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Update an accommodation by ID
 router.patch("/:id", async (req, res) => {
   try {
     const accommodation = await Accommodation.findByIdAndUpdate(
@@ -60,7 +56,6 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// Delete an accommodation by ID
 router.delete("/:id", async (req, res) => {
   try {
     const accommodation = await Accommodation.findByIdAndDelete(req.params.id);
