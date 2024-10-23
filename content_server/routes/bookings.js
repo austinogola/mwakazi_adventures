@@ -183,11 +183,11 @@ function generateEmailContent(customer, itemDetails, isPaid) {
               }</p>
           </div>
           <p>We hope you have a wonderful experience!</p>
-          <p>If you have any questions, feel free to contact us at <a href="mailto:support@gazeguard.io">support@gazeguard.io</a>.</p>
+          <p>If you have any questions, feel free to contact us at <a href="info@mwakaziadventures.com">info@mwakaziadventures.com</a>.</p>
           <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
           <footer style="text-align: center;">
-              <p style="font-size: 12px; color: #888;">Gazeguard.io | Booking Services</p>
-              <p style="font-size: 12px; color: #888;">For any inquiries, email us at <a href="mailto:support@gazeguard.io" style="color: #4CAF50;">support@gazeguard.io</a>.</p>
+              <p style="font-size: 12px; color: #888;">mwakaziadventures.com | Booking Services</p>
+              <p style="font-size: 12px; color: #888;">For any inquiries, email us at <a href="info@mwakaziadventures.com" style="color: #4CAF50;">info@mwakaziadventures.com</a>.</p>
           </footer>
       </div>`;
 }
