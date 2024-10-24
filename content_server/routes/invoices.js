@@ -51,7 +51,7 @@ router.post("/create-invoice", async (req, res) => {
       });
 
       await existingInvoice.save();
-      await sendReceiptEmail(recipientEmail, existingInvoice);
+      await sendInvoiceEmail(recipientEmail, existingInvoice);
       return res.status(200).json({
         message: "Installment added to existing invoice.",
         invoice: existingInvoice,
@@ -85,7 +85,7 @@ router.post("/create-invoice", async (req, res) => {
 
       const newInvoice = new Invoice(newInvoiceData);
       await newInvoice.save();
-      await sendReceiptEmail(recipientEmail, newInvoice);
+      await sendInvoiceEmail(recipientEmail, newInvoice);
       return res.status(201).json({
         message: "New invoice created.",
         invoice: newInvoice,
@@ -98,7 +98,7 @@ router.post("/create-invoice", async (req, res) => {
       .json({ error: "An error occurred while processing the invoice." });
   }
 
-  async function sendReceiptEmail(recipientEmail, invoice) {
+  async function sendInvoiceEmail(recipientEmail, invoice) {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
@@ -182,6 +182,69 @@ router.post("/create-invoice", async (req, res) => {
     `;
   }
 });
+
+async function findExistingInvoice(customer, itemDetails) {
+  return await Invoice.findOne({
+    recipientEmail: customer.email,
+    title: itemDetails.bookingType === "trip" ? itemDetails.title : undefined,
+    destination:
+      itemDetails.bookingType === "accommodation"
+        ? itemDetails.destination
+        : undefined,
+    startDate: new Date(customer.startDate),
+    endDate: new Date(customer.endDate),
+  });
+}
+
+function calculateTotalPaid(existingInvoice) {
+  return existingInvoice.installment
+    .filter((inst) => inst.isPaid)
+    .reduce((sum, inst) => sum + inst.payableAmount, 0);
+}
+
+async function updateExistingInvoice(existingInvoice, itemDetails) {
+  existingInvoice.installment.push({
+    paymentMethod: itemDetails.formDataBooking.paymentMethod,
+    percentage: itemDetails.formDataBooking.depositPercentage,
+    payableAmount: itemDetails.paymentAmount,
+    // isPaid: // To be determined by the getStatusUpdate function later,
+  });
+
+  await existingInvoice.save();
+}
+
+async function createNewInvoice(customer, itemDetails) {
+  const newInvoiceData = {
+    recipientEmail: customer.email,
+    startDate: new Date(customer.startDate),
+    endDate: new Date(customer.endDate),
+    installment: [
+      {
+        paymentMethod: itemDetails.formDataBooking.paymentMethod,
+        percentage: itemDetails.formDataBooking.depositPercentage,
+        payableAmount: itemDetails.paymentAmount,
+        // isPaid: false,
+      },
+    ],
+    title: itemDetails.title,
+    totalAmount: itemDetails.totalAmount,
+    recipientFirstName: customer.firstName,
+    recipientLastName: customer.lastName,
+    recipientPhone: customer.phone,
+  };
+
+  if (itemDetails.bookingType === "trip") {
+    newInvoiceData.guests = itemDetails.formDataBooking.guests;
+    newInvoiceData.tripCost = itemDetails.price;
+  } else {
+    newInvoiceData.days = itemDetails.formDataBooking.days;
+    newInvoiceData.dailyRate = itemDetails.dailyRate; // Confirm this
+  }
+
+  const newInvoice = new Invoice(newInvoiceData);
+  await newInvoice.save();
+  return newInvoice;
+}
 
 // router.post(
 //   "/create-invoice",

@@ -29,7 +29,11 @@ const invoiceSchema = new mongoose.Schema({
       },
       isPaid: {
         type: Boolean,
-        default: true,
+        default: false,
+      },
+      order_tracking_id: {
+        type: String,
+        required: true,
       },
     },
   ],
@@ -64,10 +68,16 @@ const invoiceSchema = new mongoose.Schema({
 
   destination: { type: String },
 
-  recipientName: {
+  recipientFirstName: {
     type: String,
     required: true,
   },
+
+  recipientLastName: {
+    type: String,
+    required: true,
+  },
+
   recipientEmail: {
     type: String,
     required: true,

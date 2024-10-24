@@ -110,33 +110,58 @@ const PaymentInfo = () => {
     setError("");
 
     try {
+      if (!formData || !itemDetails) {
+        throw new Error("Missing required booking information");
+      }
+
       const body = {
         itemDetails,
         isPaid: false,
         customer: formData,
       };
 
-      const { data } = await axios.post(
+      const response = await axios.post(
         `${serverUrl}/api/v1/bookings/init`,
         body,
         {
           headers: {
             Authorization: `Bearer ${ma_auth_token}`,
           },
+          timeout: 30000,
         }
       );
 
+      const { data } = response;
       console.log("Response data:", data);
 
       if (data.status === "fail") {
-        setError(data.message);
-      } else {
+        setError(data.message || "Booking failed. Please try again.");
+        if (data.details) {
+          console.error("Booking error details:", data.details);
+        }
+      } else if (data.payment_obj?.redirect_url) {
         setRedirectUrl(data.payment_obj.redirect_url);
         setShowPopup(true);
+      } else {
+        setError("Invalid response from server");
       }
     } catch (err) {
-      setError("There was an error processing your request. Please try again.");
-      console.error("Error:", err);
+      console.error("Booking error:", err);
+
+      if (err.response) {
+        const errorMessage =
+          err.response.data?.message || err.response.data?.error?.message;
+        setError(errorMessage || "Server error. Please try again.");
+      } else if (err.request) {
+        setError(
+          "Unable to reach the server. Please check your connection and try again."
+        );
+      } else {
+        setError(
+          err.message ||
+            "There was an error processing your request. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
