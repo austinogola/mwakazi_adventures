@@ -54,8 +54,6 @@ router.post("/init", async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
-  console.log("This is all the data from the frontend", req.body);
-
   try {
     const { customer, itemDetails } = req.body;
 
@@ -77,10 +75,7 @@ router.post("/init", async (req, res) => {
       return res.status(400).json({
         status: "fail",
         message: "Invalid date format",
-        details: {
-          startDate: customer.startDate,
-          endDate: customer.endDate,
-        },
+        details: { startDate: customer.startDate, endDate: customer.endDate },
       });
     }
 
@@ -93,18 +88,12 @@ router.post("/init", async (req, res) => {
       });
     }
 
-    let newBooking;
-    if (itemDetails.bookingType === "trip") {
-      newBooking = await createTripBooking(itemDetails, customer, session);
-    } else if (itemDetails.bookingType === "accommodation") {
-      newBooking = await createAccommodationBooking(
-        itemDetails,
-        customer,
-        session
-      );
-    } else {
-      throw new Error(`Invalid booking type: ${itemDetails.bookingType}`);
-    }
+    const [newBooking, newInvoice] = await Promise.all([
+      itemDetails.bookingType === "trip"
+        ? createTripBooking(itemDetails, customer, session)
+        : createAccommodationBooking(itemDetails, customer, session),
+      createNewInvoice(customer, itemDetails, session),
+    ]);
 
     if (!newBooking) {
       throw new Error("Failed to create booking");
@@ -117,15 +106,26 @@ router.post("/init", async (req, res) => {
       );
     }
 
-    newBooking.orderId = pesaPalResponse.order_tracking_id;
-    await newBooking.save({ session });
-
-    const newInvoice = await createNewInvoice(
-      customer,
-      itemDetails,
-      session,
-      pesaPalResponse.order_tracking_id
-    );
+    await Promise.all([
+      Booking.findByIdAndUpdate(
+        newBooking._id,
+        { orderId: pesaPalResponse.order_tracking_id },
+        { session }
+      ),
+      Invoice.findByIdAndUpdate(
+        newInvoice._id,
+        {
+          $set: {
+            "installment.$[elem].order_tracking_id":
+              pesaPalResponse.order_tracking_id,
+          },
+        },
+        {
+          arrayFilters: [{ "elem.payableAmount": itemDetails.paymentAmount }],
+          session,
+        }
+      ),
+    ]);
 
     const orderStatusResponse = await getOrderStatus(
       pesaPalResponse.order_tracking_id
@@ -133,29 +133,28 @@ router.post("/init", async (req, res) => {
     const paymentStatus = orderStatusResponse?.payment_status_description;
     const isPaid = paymentStatus?.toUpperCase() === "COMPLETED";
 
-    await Booking.findByIdAndUpdate(newBooking._id, { isPaid }, { session });
-
-    await Invoice.findByIdAndUpdate(
-      newInvoice._id,
-      {
-        $set: {
-          "installment.$[elem].isPaid": isPaid,
+    await Promise.all([
+      Booking.findByIdAndUpdate(newBooking._id, { isPaid }, { session }),
+      Invoice.findByIdAndUpdate(
+        newInvoice._id,
+        {
+          $set: {
+            "installment.$[elem].isPaid": isPaid,
+          },
         },
-      },
-      {
-        arrayFilters: [
-          { "elem.order_tracking_id": pesaPalResponse.order_tracking_id },
-        ],
-        session,
-      }
-    );
+        {
+          arrayFilters: [
+            { "elem.order_tracking_id": pesaPalResponse.order_tracking_id },
+          ],
+          session,
+        }
+      ),
+    ]);
 
-    const updatedBooking = await Booking.findById(newBooking._id).session(
-      session
-    );
-    const updatedInvoice = await Invoice.findById(newInvoice._id).session(
-      session
-    );
+    const [updatedBooking, updatedInvoice] = await Promise.all([
+      Booking.findById(newBooking._id).session(session),
+      Invoice.findById(newInvoice._id).session(session),
+    ]);
 
     const newReceipt = await createNewReceipt(
       customer,
@@ -167,15 +166,14 @@ router.post("/init", async (req, res) => {
       session
     );
 
-    try {
-      await Promise.all([
-        sendReceiptEmail(customer, newReceipt, isPaid),
-        sendBookingEmail(customer, itemDetails, isPaid),
-        sendInvoiceEmail(customer, updatedInvoice, isPaid),
-      ]);
-    } catch (emailError) {
-      console.error("Email sending failed:", emailError);
-    }
+    await Promise.all([
+      sendInvoiceEmail(customer, updatedInvoice),
+      sendBookingEmail(customer, itemDetails, isPaid),
+    ]);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    await sendReceiptEmail(customer, newReceipt);
 
     await session.commitTransaction();
 

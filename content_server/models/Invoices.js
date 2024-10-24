@@ -33,7 +33,6 @@ const invoiceSchema = new mongoose.Schema({
       },
       order_tracking_id: {
         type: String,
-        required: true,
       },
     },
   ],
