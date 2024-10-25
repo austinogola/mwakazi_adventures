@@ -2,13 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/PopularTrips.css";
 
+const LoadingSpinner = () => (
+  <div className="loading-spinner">
+    <div className="circle circle1"></div>
+    <div className="circle circle2"></div>
+    <div className="circle circle3"></div>
+    <div className="circle circle4"></div>
+  </div>
+);
+
 const PopularTrips = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [showItems, setShowItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // const serverUrl = 'https://server.mwakaziadventures.com';
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const handleBookNow = useCallback(
@@ -26,68 +34,19 @@ const PopularTrips = () => {
       });
       const response = await res.json();
       setShowItems(response.trips);
-      console.log(response);
     } catch (error) {
       console.error("Error fetching popular trips:", error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [serverUrl]);
 
   useEffect(() => {
     fetchPopularTrips();
   }, [fetchPopularTrips]);
 
-  const ImageWithLazyLoading = ({ src, alt, className }) => {
-    const [imageSrc, setImageSrc] = useState(
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-    );
-    const [imageRef, setImageRef] = useState();
-
-    useEffect(() => {
-      let observer;
-      let didCancel = false;
-
-      if (imageRef && imageSrc !== src) {
-        if (IntersectionObserver) {
-          observer = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (
-                  !didCancel &&
-                  (entry.intersectionRatio > 0 || entry.isIntersecting)
-                ) {
-                  setImageSrc(src);
-                  observer.unobserve(imageRef);
-                }
-              });
-            },
-            {
-              threshold: 0.01,
-              rootMargin: "75%",
-            }
-          );
-          observer.observe(imageRef);
-        } else {
-          // Fallback for older browsers
-          setImageSrc(src);
-        }
-      }
-      return () => {
-        didCancel = true;
-        if (observer && observer.unobserve) {
-          observer.unobserve(imageRef);
-        }
-      };
-    }, [src, imageSrc, imageRef]);
-
-    return (
-      <img ref={setImageRef} src={imageSrc} alt={alt} className={className} />
-    );
-  };
-
   if (isLoading) {
-    return <div>Loading popular trips...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -98,7 +57,7 @@ const PopularTrips = () => {
       </div>
 
       <div className="items-holder">
-        {showItems.map((item) => (
+        {showItems.slice(0, 6).map((item) => (
           <div
             key={item._id}
             className="itemHolder"
@@ -106,8 +65,7 @@ const PopularTrips = () => {
             onMouseLeave={() => setHoveredItem(null)}
           >
             <div className="imageHolder">
-              <ImageWithLazyLoading src={item.images[0]} alt={item.title} />
-
+              <img src={item.images[0]} alt={item.title} loading="lazy" />
               <div
                 className={`overlay ${hoveredItem === item._id ? "show" : ""}`}
               >
@@ -142,6 +100,7 @@ const PopularTrips = () => {
           </div>
         ))}
       </div>
+
       <div className="button_holder">
         <Link to="/trips">
           <button>VIEW ALL TRIPS</button>
